@@ -1,0 +1,30 @@
+{% extends "cynr_app/base_paginas.html" %}
+
+{% block content %}
+<main id="main">
+<section class="contact">   
+      <div class="container">
+      <h4>Iniciar Sesión</h4>
+      <form method="POST"  role="form" class="php-email-form">
+            {% csrf_token %}
+      <div class="control-group">
+      <label class="control-label" for="id_usuario"><dt>Usuario</dt></label>
+      <input type="text" class="form-control" placeholder="Usuario" name="username" id="id_usuario">
+      </div>
+      </br>
+      <div class="control-group">
+      <label class="control-label" for="id_contra"><dt>Contraseña</dt></label>
+      <input type="password" class="form-control" placeholder="Contraseña" name="password" id="id_contra">
+      </div>
+      </br>
+      <button type="submit">Enviar</button>
+      </form>
+      </br>
+      <div class="row">
+      <div class="col-sm-4">¿No está registrado? <a href="{% url 'cynr_app:signup' %}">Cree su Cuenta</a></div>
+      <div class="col-sm-8"><a href="">Recuperar Usuario y Contraseña</a></div>
+      </div>
+      </div>
+</section>
+</main> 
+{% endblock content %}

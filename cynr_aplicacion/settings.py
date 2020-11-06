@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.gis',
     'django.contrib.postgres',
-    'cynr_app'
+    'cynr_app.apps.CynrAppConfig'
 ]
 
 MIDDLEWARE = [
@@ -127,3 +127,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# REGISTRACION Y AUTENTICACION
+LOGIN_REDIRECT_URL = 'cynr_app:index'
+LOGIN_URL = '/accounts/login/'
+LOGOUT_REDIRECT_URL	= 'cynr_app:index'

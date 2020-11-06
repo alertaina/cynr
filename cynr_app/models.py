@@ -2,109 +2,153 @@
 from django.contrib.postgres.fields import HStoreField
 from django.contrib.gis.db import models
 from django.contrib.auth.models import User
-
-
+from  django.utils.timezone import now
+from django.contrib.postgres.fields import ArrayField
 ##########################################################################
-# ORGANISMOS
+# 1 CATEGORIAS
+# Sirve para guardar categorias que luego se usan para campos del tipo choice, es decir
+# en listas desplegables en las otras tablas. Definen valores posibles de algunos campos.
 #-------------------------------------------------------------------------
-class Organismos(models.Model):
+class GruposCategorias(models.Model):
     autor = models.ForeignKey(User,on_delete=models.CASCADE)
-    id = models.IntegerField(primary_key=True)
-    razon_social = models.TextField(default=None,blank=False)
-    presentacion = models.TextField(default=None,blank=True)
-    logo = models.ImageField(upload_to='cynr_app/logos')
-    ubicacion = models.TextField(default=None,blank=False)
+    id = models.AutoField(primary_key=True)
+    grupo = models.TextField(default=None,blank=False)
     class Meta:
         managed = True
-        db_table = 'organismos'
-
-##########################################################################
-# PRESTADORES DE SERVICIOS
-#-------------------------------------------------------------------------
-class PrestadoresServicios(models.Model):
+        db_table = 'grupos_categorias'
+class Categorias(models.Model):
     autor = models.ForeignKey(User,on_delete=models.CASCADE)
-    id = models.IntegerField(primary_key=True)
-    razon_social = models.TextField(default=None,blank=False)
-    presentacion = models.TextField(default=None,blank=True)
-    logo = models.ImageField(upload_to='cynr_app/logos')
-    ubicacion = models.TextField(default=None,blank=False)
+    id = models.AutoField(primary_key=True)
+    id_grupo = models.ForeignKey(GruposCategorias,related_name='idGruposCategorias',on_delete=models.CASCADE, blank=False, null=False,db_column='id_grupo')
+    categoria = models.TextField(default=None,blank=False)
     class Meta:
         managed = True
-        db_table = 'prestadores_servicios'
+        db_table = 'categorias'
 ##########################################################################
-# CONTACTOS REGISTRADOS
+# 2 INSTITUCIONES
+#-------------------------------------------------------------------------
+class Instituciones(models.Model):
+    autor = models.ForeignKey(User,on_delete=models.CASCADE)
+    id = models.AutoField(primary_key=True)
+    razon_social = models.TextField(default=None,blank=False)
+    categoria = models.TextField(default=None,blank=False)
+    presentacion = models.TextField(default=None,null=True,blank=True)
+    pag_web = models.TextField(default=None,null=True,blank=True)
+    logo = models.ImageField(upload_to='cynr_app/logos',null=True,blank=True)
+    direccion = models.TextField(default=None,null=True,blank=True)
+    tel = models.TextField(default=None,null=True,blank=True)
+    jurisdiccion = models.TextField(default=None,null=True,blank=True)
+    class Meta:
+        managed = True
+        db_table = 'instituciones'
+
+##########################################################################
+# 3 DOC INSTITUCIONES
+#-------------------------------------------------------------------------
+##########################################################################
+class DocInstituciones(models.Model):
+    autor = models.ForeignKey(User,on_delete=models.CASCADE)
+    id = models.AutoField(primary_key=True)
+    id_inst = models.ManyToManyField(Instituciones) # crea otra tabla. un doc puede hacer referencia a varias instituciones
+    doc = models.TextField(default=None,blank=True)
+    conclusion = models.TextField(default=None,blank=True)
+    class Meta:
+        managed = True
+        db_table = 'doc_instituciones'  
+
+##########################################################################
+# 4 CONTACTOS REGISTRADOS
 #-------------------------------------------------------------------------
 class Contactos(models.Model):
+    # relacion uno a uno con los usuarios registrados
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    id_presserv = models.ForeignKey(PrestadoresServicios,related_name='idPresServContacto',on_delete=models.CASCADE, blank=True, null=False,db_column='id_presserv')
-    id_org = models.ForeignKey(PrestadoresServicios,related_name='idOrgContacto',on_delete=models.CASCADE, blank=True, null=False,db_column='id_org')
+    id_inst = models.ForeignKey(Instituciones,related_name='idInstitucion',on_delete=models.CASCADE,db_column='id_inst')
+    nombre_cont = models.TextField(default=None,blank=False)
+    apellido_cont = models.TextField(default=None,blank=False)
+    cargo = models.TextField(default=None,blank=True)
+    dir_inst = models.TextField(default=None,blank=True)
+    tel_inst = models.TextField(default=None,blank=True)
+    email_inst = models.TextField(default=None,blank=True)
     class Meta:
         managed = True
         db_table = 'contactos'
 
 ##########################################################################
-# OBRAS DE TOMA
+# 5 INFRAESTRUCTURA
+#-------------------------------------------------------------------------
+class Infraestructura(models.Model):
+    autor = models.ForeignKey(User,on_delete=models.CASCADE)
+    id = models.AutoField(primary_key=True)
+    categoria = models.TextField(default=None,blank=False)
+    nombre = models.TextField(default=None,blank=False)
+    descripcion = models.TextField(default=None,blank=True)    
+    geom = models.GeometryField(blank=True, null=True)
+    # file will be uploaded to MEDIA_ROOT / uploads 
+    ficha_tec = models.FileField(upload_to ='fichas_tecnicas/')
+    class Meta:
+        managed = True
+        db_table = 'infraestructura'
+##########################################################################
+# 6 OBRAS DE TOMA
 #-------------------------------------------------------------------------
 class ObrasToma(models.Model):
-    TIPOLOGIA_OBRA_TOMA =(
-    ("ESTACION FIJA", "ESTACIÓN DE BOMBEO  CON BATERIA DE BOMBAS DE COTA FIJA"),
-    ("PONTON", "PONTÓN : ESTACIÓN DE BOMBEO  CON BATERIA DE BOMBAS DE COTA VARIABLE SEGÚN NA"))
-    SERVICIO = (("PERMANTENTE","PERMENENTE: Obra que presta un servicio permanente."),
-                ("TRANSITORIA","TRANSITORIA: Obra que presta un servicio temporalmente."))
-    USO = (("CONSUMO","CONSUMO"),
-            ("INDUSTRIAL","INDUSTRIAL"),
-            ("RIEGO","RIEGO"))            
-    ESTADO = (("FUNCIONAMIENTO PLENO","FUNCIONAMIENTO PLENO: Funcionamiento sin limitaciones"),
-              ("FUNCIONAMIENTO PARCIAL","FUNCIONAMIENTO PARCIAL: Funcionamiento con limitaciones "),
-              ("INACTIVA","INACTIVA: Desafectada del Sevicio")
-    )
     autor = models.ForeignKey(User,on_delete=models.CASCADE)
-    id = models.IntegerField(primary_key=True)
-    nombre = models.TextField(default=None,blank=False)
-    descripcion = models.TextField(blank=True, null=True)
-    geom = models.PointField(blank=True, null=True)
-    id_presserv = models.ForeignKey(PrestadoresServicios,related_name='idPresServObra',on_delete=models.CASCADE, blank=True, null=False,db_column='id_presserv')
-    tipo =  models.TextField(blank=False, null=False,choices=TIPOLOGIA_OBRA_TOMA)
-    servicio = models.TextField(blank=False, null=False,choices=SERVICIO)
-    uso = models.TextField(blank=False, null=False,choices=USO)
-    estado = models.TextField(blank=False, null=False,choices=ESTADO)
-    cynr = HStoreField() # cotas y niveles de referencia
+    id = models.AutoField(primary_key=True)
+    id_infra = models.ForeignKey(Infraestructura,related_name='idInfra',on_delete=models.CASCADE, blank=False,db_column='id_infra')
+    tipo =  models.TextField(blank=False, null=False) # LISTA DESPLEGABLE
+    funcionamiento = models.TextField(blank=False, null=False)# LISTA DESPLEGABLE
+    uso = models.TextField(blank=False, null=False)# LISTA DESPLEGABLE
+    estado = models.TextField(blank=False, null=False)# LISTA DESPLEGABLE
+    desc_estado = models.TextField(blank=True, null=True)
+
     class Meta:
         managed = True
         db_table = 'obras_toma'
-       # constraints = [
-       #     models.CheckConstraint(check=models.Q(tipo='ESTACION FIJA' | tipo ='PONTON'), name='tipologia_ot'),
-       #     models.CheckConstraint(check=models.Q(servicio='PERMANENTE' | servicio ='TRANSITORIA'), name='servicio_ot'),
-       #     models.CheckConstraint(check=models.Q(uso='CONSUMO' | uso ='INDUSTRIAL' | uso ='RIEGO'), name='uso_ot'),
-       #     models.CheckConstraint(check=models.Q(estado='FUNCIONAMIENTO PLENO' | estado ='FUNCIONAMIENTO PARCIAL' | estado ='INACTIVA'), name='estado_ot'),
-       # ]
-        #db_constraints = {
-        #    'tipologia': 'check (tipo=\'ESTACION FIJA\'::text OR tipo=\'PONTON\'::text)',
-        #    'servicio': 'check (servicio=\'PERMANENTE\'::text OR servicio=\'TRANSITORIA\'::text)',
-        #    'uso': 'check (uso=\'CONSUMO\'::text OR uso=\'INDUSTRIAL\'::text,uso=\'RIEGO\'::text)',
-        #    'estado': 'check (estado=\'FUNCIONAMIENTO PLENO\'::text OR estado=\'FUNCIONAMIENTO PARCIAL\'::text,estado=\'INACTIVA\'::text)'
-        #}
 
 ##########################################################################
-# OBSERVACIONES
+# 7 COTAS Y NIVELES DE REFERENCIA
 #-------------------------------------------------------------------------
-class Observaciones(models.Model):
-    autor = models.ForeignKey(User,on_delete=models.CASCADE)
-    id = models.IntegerField(primary_key=True)
-    obs = models.JSONField()
+class CyNR(models.Model):
+   autor = models.ForeignKey(User,on_delete=models.CASCADE)
+   id = models.AutoField(primary_key=True)
+   unid_meteo_est = models.IntegerField(blank=True, null=True) # unid de la etacion en la base Meteorology
+   id_infra = models.ForeignKey(Infraestructura,related_name='idInfraCyN',on_delete=models.CASCADE, blank=False, null=False,db_column='id_infra')    
+   referencia = models.TextField(blank=False, null=False) # Ej Cota Sum Min Bomba1 Est Hernández
+   valor = models.FloatField(blank=False, null=False)
+   descripcion = models.TextField(blank=False, null=False)
+   class Meta:
+       managed = True
+       db_table = 'cynr'
+
+##########################################################################
+# 8 DOCUMENTOS
+#-------------------------------------------------------------------------
+class Documentos(models.Model):
+    autor = models.ForeignKey(User,on_delete=models.CASCADE)    
+    id = models.AutoField(primary_key=True)
+    id_infra = models.ForeignKey(Infraestructura,related_name='idInfraDoc',on_delete=models.CASCADE, blank=False,db_column='id_infra')
+    id_cynr =  models.ForeignKey(Infraestructura,related_name='idCyNRDoc',on_delete=models.CASCADE, blank=False,db_column='id_cynr')
+    categoria = models.TextField(default=None,blank=False)
+    titulo = models.TextField(default=None,blank=False)
+    descripcion = models.TextField(default=None,blank=True)
+    documento = models.JSONField()
     class Meta:
         managed = True
-        db_table = 'observaciones'
+        db_table = 'documentos'
+
 ##########################################################################
-# ENTREVISTAS
+# 9 ARCHIVOS
 #-------------------------------------------------------------------------
-class Entrevistas(models.Model):
-    autor = models.ForeignKey(User,on_delete=models.CASCADE)
-    id = models.IntegerField(primary_key=True)
-    entrevista = models.JSONField()
+class Archivos(models.Model):
+    autor = models.ForeignKey(User,on_delete=models.CASCADE)    
+    id = models.AutoField(primary_key=True)
+    categoria = models.TextField(default=None,blank=False)
+    # file will be uploaded to MEDIA_ROOT / uploads 
+    archivo = models.FileField(upload_to ='archivos/')
     class Meta:
         managed = True
-        db_table = 'entrevistas'
+        db_table = 'archivos'
+
 ##########################################################################
-# INFORMES
+# 10 NOTICIAS
 #-------------------------------------------------------------------------

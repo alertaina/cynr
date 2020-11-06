@@ -15,8 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-
+from django.contrib.auth import views as auth_views
+from cynr_app import menu
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('cynr_app/', include('cynr_app.urls')),
+    #path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/login/', auth_views.LoginView.as_view(extra_context={'menu_navegacion':menu.MENU_NAVEGACION}),name='login'),
+    path('accounts/logout/', auth_views.LogoutView.as_view(),name='logout'),
 ]
