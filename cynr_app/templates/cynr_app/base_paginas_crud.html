@@ -1,5 +1,17 @@
 {% extends "cynr_app/base_paginas.html" %}
 
+{% block head %}
+<!-- ======= Contenido para Representar mapas con Geodjango ======= -->
+<!--{{geoformmedia}}-->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+   crossorigin=""/>
+<!-- Make sure you put this AFTER Leaflet's CSS -->
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+crossorigin=""></script>
+{% endblock head %}
+
 {% block content %}
 
   <!-- ======= Encabezado de la Pagina ======= -->
@@ -23,7 +35,9 @@
             <div class="row">
               <div class="col-sm-6">
                 <a href="#" class="btn btn-success" onclick="return abrir_modal('{% url contenido.url_crear %}')" >
-                  <i class="fas fa-plus-circle"></i> <span>Agregar</span></a>	 					
+                  <i class="fas fa-plus-circle"></i> <span>Agregar</span></a>
+               <!--<a href="{% url contenido.url_crear %}" class="btn btn-success" >
+                  <i class="fas fa-plus-circle"></i> <span>Agregar</span></a>-->	 					
               </div>
             </div>
           </div>
@@ -188,17 +202,18 @@
           $(this).modal({
               backdrop: 'static',
               keyboard: false,
-          })
+          });
           $(this).modal('show');
           });
           return false;
       }
+
       function cerrar_modal()
       {
       $('#crearItemModal').modal('hide');
       return false;
       }
+      
   </script>
   </section>
-  </main> 
   {% endblock content %}

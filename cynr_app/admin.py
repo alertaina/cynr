@@ -6,6 +6,15 @@ from .models import *
 admin.site.register(GruposCategorias)
 admin.site.register(Categorias)
 admin.site.register(Instituciones)
+admin.site.register(DocInstitucionales)
+admin.site.register(Contactos)
+admin.site.register(Infraestructura)
+admin.site.register(CyNR)
+admin.site.register(ObrasToma)
+admin.site.register(Documentos)
+admin.site.register(Archivos)
+admin.site.register(Noticias)
+
 #@admin.register(Categorias)
 #class CategoriasAdmin(admin.ModelAdmin):
     #list_display = ('autor','id_grupo','categoria')

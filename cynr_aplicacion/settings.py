@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.gis',
     'django.contrib.postgres',
-    'cynr_app.apps.CynrAppConfig'
+    'cynr_app.apps.CynrAppConfig',
+    'cynr_admin'
 ]
 
 MIDDLEWARE = [

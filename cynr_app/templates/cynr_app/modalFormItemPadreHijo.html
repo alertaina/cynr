@@ -1,0 +1,50 @@
+<div class="modal-dialog modal-xl">
+<div class="modal-content">
+      <div class="modal-header">
+        {% if obj %}
+        <h4 class="modal-title">Actualizar Registro</h4>
+        {% else %}  						
+        <h4 class="modal-title">Crear Registro</h4>
+        {% endif %}
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      </div>
+      <div class="modal-body">
+        {% if obj %}
+          <form method="post" action='{% url contenido.url_editar obj.pk %}' class="php-email-form">
+        {% else %}
+          <form method="post" action='{% url contenido.url_crear %}' class="php-email-form">
+        {% endif %}  
+          {% csrf_token %}
+            {% for field in form %}     
+              <div class="form-group">
+                <div class="col-md-12"><label class="control-label" for="{{ field.id_for_label }}"><dt>{{ field.label }}</dt></label></div>
+                <div class="col-md-12">{{field}}</div>
+              </div>
+              <div class="{% if field.errors %} invalid{% endif %}">
+                {% for error in field.errors %}
+                  <p class="help-block">{{ error }}</p>
+                {% endfor %}
+              </div>
+            {% endfor %}
+            <!-- Este es el manejador del inline --> 
+            {{ children.management_form }} 
+              {% for form_item in children %}
+                {% for field in form_item %}     
+                  <div class="form-group">
+                    <div class="col-md-12"><label class="control-label" for="{{ field.id_for_label }}"><dt>{{ field.label }}</dt></label></div>
+                    <div class="col-md-12">{{field}}</div>
+                  </div>
+                {% endfor %}
+              {% endfor %}
+            {% if obj %}
+              <button type="submit" class="submit-btn btn btn-primary">Actualizar</button>
+            {% else %}
+              <button type="submit" class="submit-btn btn btn-primary">Crear</button>
+            {% endif %}
+        </form>					
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+</div>
+</div>

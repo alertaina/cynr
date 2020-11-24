@@ -1,7 +1,11 @@
-<div class="modal-dialog">
+<div class="modal-dialog modal-lg">
 <div class="modal-content">
-      <div class="modal-header">						
-        <h4 class="modal-title">Edit Employee</h4>
+      <div class="modal-header">
+        {% if obj %}
+        <h4 class="modal-title">Actualizar Registro</h4>
+        {% else %}  						
+        <h4 class="modal-title">Crear Registro</h4>
+        {% endif %}
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
       </div>
       <div class="modal-body">
@@ -27,7 +31,7 @@
             {% else %}
               <button type="submit" class="submit-btn btn btn-primary">Crear</button>
             {% endif %}
-        </form>					
+        </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

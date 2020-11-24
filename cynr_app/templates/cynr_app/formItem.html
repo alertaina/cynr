@@ -1,0 +1,59 @@
+{% extends "cynr_app/base_paginas.html" %}
+
+{% block head %}
+<!-- ======= Contenido para Representar mapas con Geodjango ======= -->
+{{geoformmedia}}
+{% endblock head %}
+
+{% block content %}
+
+  <!-- ======= Encabezado de la Pagina ======= -->
+  <section class="breadcrumbs">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center">
+        <h2>{{contenido.titulo}}</h2>
+
+        <ol>
+          <li><a href="{% url 'cynr_app:index' %}">CYNR</a></li>
+          <li>{{contenido.titulo}}</li>
+        </ol>
+      </div>
+    </div>
+  </section><!-- End Blog Section -->
+  <section class="features">   
+    <div class="container">
+      {% if obj %}
+      <h4 class="modal-title">Actualizar Registro</h4>
+      {% else %}  						
+      <h4 class="modal-title">Crear Registro</h4>
+      {% endif %}
+      {% if obj %}
+        <form method="post" action='{% url contenido.url_editar obj.pk %}' class="php-email-form">
+      {% else %}
+        <form method="post" action='{% url contenido.url_crear %}' class="php-email-form">
+      {% endif %}  
+          {% csrf_token %}
+          {% for field in form %}     
+            <div class="form-group">
+              <div class="col-md-12"><label class="control-label" for="{{ field.id_for_label }}"><dt>{{ field.label }}</dt></label></div>
+              <div class="col-md-12">{{field}}</div>
+            </div>
+            <div class="{% if field.errors %} invalid{% endif %}">
+              {% for error in field.errors %}
+                <p class="help-block">{{ error }}</p>
+              {% endfor %}
+            </div>
+          {% endfor %}
+        {% if obj %}
+          <button type="submit" class="submit-btn btn btn-primary">Actualizar</button>
+        {% else %}
+          <button type="submit" class="submit-btn btn btn-primary">Crear</button>
+        {% endif %}
+        </form>
+    </div>
+    <!-- SCRIPT PARA ABRIR EL MODAL-->
+    <script>
+ 
+    </script>
+  </section>
+  {% endblock content %}

@@ -31,7 +31,9 @@
 
         <!-- kit's para las fuentes de Awersome con la cuenta de alertaina -->
         <script src="https://kit.fontawesome.com/9df9521d33.js" crossorigin="anonymous"></script>
-    </head>
+        
+        {% block head %} {% endblock %}
+      </head>
     <body>
    <!-- ======= Header ======= -->
    <header id="header" class="fixed-top ">
@@ -59,6 +61,7 @@
                <li> <a href= {{ value }}>{{ key }}</a></li>
                {% endif %}
               {% endfor %}
+              <li><a href="{% url 'cynr_app:geomanio' %}" title="Geoman.io">Geoman.io</a></li>
               {% if user.is_authenticated %}
               <li><a href="{% url 'logout' %}" title="Salir de la Sesión"><i class="fa fa-power-off" style='color: white;'></i>&nbsp;Salir de Sesión</a></li>
               <li><a><i class="fa fa-user" style='color: white;'></i> &nbsp;{{ user.username }}</a></li>
