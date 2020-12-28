@@ -12,7 +12,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 #from django.views.generic import CreateView
 from django.views.generic.edit import CreateView, UpdateView
-
+from django.db import transaction
 from django.urls import reverse_lazy
 #mport json
 
@@ -73,6 +73,29 @@ class SignUp(BaseCreateView):
     success_url = reverse_lazy('login')
     template_name = 'registration/signup.html'
 
+#########################################################################
+# CLASE PARA LA CREACIÓN DE INFRAESTRUCTURA
+#########################################################################
+class BaseInfraestructuraCreateView(LoginRequiredMixin, CreateView):
+
+    def form_valid(self, form):
+        f = form.save(commit=False)
+        f.autor = self.request.user
+        f.geom = self.request.POST["geom"]
+        f.save()
+        return super().form_valid(form)
+
+#########################################################################
+# CLASE PARA LA ACTUALIZACIÓN DE INFRAESTRUCTURA
+#########################################################################
+class BaseInfraestructuraUpdateView(LoginRequiredMixin, UpdateView):
+
+    def form_valid(self, form):
+        f = form.save(commit=False)
+        f.autor = self.request.user
+        f.geom = self.request.POST["geom"]
+        f.save()
+        return super().form_valid(form)
 
 #########################################################################
 # CLASE PARA LA CREACION DE OBRAS DE TOMA
@@ -103,18 +126,30 @@ class BaseObraTomaCreateView(LoginRequiredMixin, CreateView):
 #########################################################################
 # CLASE BASE PARA CREACIÓN DE DOCUMENTOS
 #########################################################################
-#class BaseCreateDoc(LoginRequiredMixin, CreateView):
-#
-#    def form_valid(self, form):
-#        context = self.get_context_data()
-#        f = form.save(commit=False)
-#        f.autor = self.request.user
-#        d={}
-#        d['titulo']=context['documento_titulo']
-#        d['contenido']=context['documento_contenido']
-#        f.documento = json.dumps(d) 
-#        f.save()
-#        return super().form_valid(form)
+class BaseCreateDoc(LoginRequiredMixin, CreateView):
+    model = Documentos
+    template_name = 'cynr_app/modalFormItemPadreHijo.html'
+    form_class = FormDoc
+    #success_url = None
+
+    def get_context_data(self, **kwargs):
+        data = super(BaseCreateDoc, self).get_context_data(**kwargs)
+        if self.request.POST:
+            data['hijos'] = DocContDocFormSet(self.request.POST)
+        else:
+            data['hijos'] = DocContDocFormSet()
+        return data
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        hijos = context['hijos']
+        with transaction.atomic():
+            form.instance.autor = self.request.user
+            self.object = form.save()
+            if hijos.is_valid():
+                hijos.instance = self.object
+                hijos.save()
+        return super(BaseCreateDoc, self).form_valid(form)
 
 ##########################################################################
 # VISTA INSTITUCIONES
@@ -124,3 +159,4 @@ class BaseObraTomaCreateView(LoginRequiredMixin, CreateView):
     # model = Instituciones
     #template_name = 'cynr_app/base_paginas_crud.html'
     #paginate_by = 20  # if pagination is desired
+

@@ -6,7 +6,7 @@ from .models import *
 
 # PÁGINA INSTITUCIONES -----------------------------------------------------------------------------
 # Datos para la Tabla
-querysetPagInst= Instituciones.objects.all().order_by('nombre').values('autor__username','id','nombre','categoria','jurisdiccion')
+querysetPagInst= Instituciones.objects.all().order_by('nombre').values('autor__username','id','nombre','categoria','alc_geografico')
 contextoPagInst ={
                     'titulo': 'Instituciones',
                     'encabezados':['Autor','Nombre','Categoria','Jurisdicción'],
@@ -18,7 +18,7 @@ contextoPagInst ={
 
 # PÁGINA DOC INSTITUCIONES -----------------------------------------------------------------------------
 # Datos para la Tabla
-querysetPagDocInst= DocInstitucionales.objects.all().values('autor__username','id','nombre','presentacion','categoria','jurisdiccion')
+querysetPagDocInst= DocInstitucionales.objects.all().values('autor__username','id','nombre','presentacion','categoria','alc_geografico')
 contextoDocPagInst ={
                     'titulo': 'Documentos Institucionales',
                     'encabezados':['Autor','Nombre','Presenttación','Categoría','Jurisdicción'],
@@ -66,10 +66,10 @@ contextoCyNR ={
 
 # PÁGINA DOCUEMNTOS -----------------------------------------------------------------------------
 # Datos para la Tabla
-querysetDoc= Documentos.objects.all().order_by('id_infra__nombre').values('autor__username','id','id_infra__nombre','categoria','titulo','descripcion')
+querysetDoc= Documentos.objects.all().order_by('fecha_hora').values('autor__username','id','fecha_hora','categoria','titulo','descripcion')
 contextoDoc ={
                     'titulo': 'Documentos',
-                    'encabezados':['Autor','Infraestructura','Categoria','Titulo','Descripción'],
+                    'encabezados':['Autor','Fecha','Categoria','Titulo','Descripción'],
                     'url_crear':'cynr_app:documentos_crud_crear',
                     'url_editar':'cynr_app:documentos_crud_editar',
                     'url_eliminar':'cynr_app:documentos_crud_eliminar'
@@ -80,3 +80,15 @@ contextoDoc ={
 contextoGeomanio ={
                     'titulo': 'Geomanio.io',
                   }
+
+# PÁGINA NOTICIAS -----------------------------------------------------------------------------
+# Datos para la Tabla
+querysetNot= Noticias.objects.all().order_by('fecha_hora').values('autor__username','id','fecha_hora','id_infra__nombre','encabezado')
+contextoNot ={
+                    'titulo': 'Noticia',
+                    'encabezados':['Autor','Fecha','Infraestructura','Encabezado'],
+                    'url_crear':'cynr_app:noticias_crud_crear',
+                    'url_editar':'cynr_app:noticias_crud_editar',
+                    'url_eliminar':'cynr_app:noticias_crud_eliminar'
+                 }   
+# -------------------------------------------------------------------------------------------------

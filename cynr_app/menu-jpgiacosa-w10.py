@@ -26,6 +26,6 @@ MENU_NAVEGACION = {
                    'Infraestructura': {'menu': dict_infra},
                    'Instituciones': {'menu': dict_inst},
                    'Documentos':'/cynr_app/documentos_crud',
-                   'Noticias': '/cynr_app/noticias_crud',
+                   'Noticias': '/noticias',
                    'CyNR':'/cynr_app/cynr_crud',
                   }

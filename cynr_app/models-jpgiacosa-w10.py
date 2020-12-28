@@ -39,7 +39,7 @@ class Instituciones(models.Model):
     autor = models.ForeignKey(User,null=True,on_delete=models.SET_NULL)
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=200,default=None,blank=False,verbose_name='Nombre')
-    categoria = models.CharField(max_length=100,default=None,blank=False)
+    categoria = models.CharField(max_length=50,default=None,blank=False)
     presentacion = models.TextField(default=None,blank=True,verbose_name='Presentación')
     pag_web = models.URLField(max_length = 200,blank=True,verbose_name='Página Web')
     logo = models.ImageField(upload_to='cynr_app/logos',blank=True,verbose_name='Logo')
@@ -90,7 +90,7 @@ class Contactos(models.Model):
     email_inst = models.EmailField(max_length=254,default=None,blank=True,verbose_name='Email Institucional')
 
     def __str__(self):
-        return self.user.username
+        return self.user__username
 
     class Meta:
         managed = True

@@ -2353,3 +2353,141 @@ section {
 #footer .credits a {
   color: #a2cce3;
 }
+
+/*--------------------------------------------------------------
+# AGREGADAS PARA ESTA APLICACION CYNR
+--------------------------------------------------------------*/
+/*--------------------------------------------------------------
+# crud
+--------------------------------------------------------------*/
+.crud {
+  padding-bottom: 30px;
+}
+
+.crud .info-box {
+  color: #444;
+  text-align: center;
+  box-shadow: 0 0 30px rgba(214, 215, 216, 0.6);
+  padding: 20px 0 30px 0;
+  margin-bottom: 30px;
+}
+
+.crud .info-box i {
+  font-size: 32px;
+  color: #68A4C4;
+  border-radius: 50%;
+  padding: 8px;
+  border: 2px dotted #a2cce3;
+}
+
+.crud .info-box h3 {
+  font-size: 20px;
+  color: #666;
+  font-weight: 700;
+  margin: 10px 0;
+}
+
+.crud .info-box p {
+  padding: 0;
+  line-height: 24px;
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+.crud .modal-form {
+  box-shadow: 0 0 30px rgba(214, 215, 216, 0.6);
+  padding: 30px;
+  margin-bottom: 30px;
+}
+
+.crud .modal-form .validate {
+  display: none;
+  color: red;
+  margin: 0 0 15px 0;
+  font-weight: 400;
+  font-size: 13px;
+}
+
+.crud .modal-form .error-message {
+  display: none;
+  color: #fff;
+  background: #ed3c0d;
+  text-align: left;
+  padding: 15px;
+  font-weight: 600;
+}
+
+.crud .modal-form .error-message br + br {
+  margin-top: 25px;
+}
+
+.crud .modal-form .sent-message {
+  display: none;
+  color: #fff;
+  background: #18d26e;
+  text-align: center;
+  padding: 15px;
+  font-weight: 600;
+}
+
+.crud .modal-form .loading {
+  display: none;
+  background: #fff;
+  text-align: center;
+  padding: 15px;
+}
+
+.crud .modal-form .loading:before {
+  content: "";
+  display: inline-block;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  margin: 0 10px -6px 0;
+  border: 3px solid #18d26e;
+  border-top-color: #eee;
+  -webkit-animation: animate-loading 1s linear infinite;
+  animation: animate-loading 1s linear infinite;
+}
+
+.crud .modal-form input, .contact .php-email-form textarea {
+  border-radius: 0;
+  box-shadow: none;
+  font-size: 14px;
+}
+
+.crud .moda-form input::focus, .contact .php-email-form textarea::focus {
+  background-color: #68A4C4;
+}
+
+.crud .modal-form input {
+  padding: 20px 15px;
+}
+
+.crud .modal-form textarea {
+  padding: 12px 15px;
+}
+
+.crud .moda-form button[type="submit"] {
+  background: #68A4C4;
+  border: 0;
+  padding: 10px 24px;
+  color: #fff;
+  transition: 0.4s;
+}
+
+.crud .modal-form button[type="submit"]:hover {
+  background: #8dbad2;
+}
+
+.crud .crud-button {
+  background: #68A4C4;
+  border: 0;
+  padding: 10px 24px;
+  color: #fff;
+  transition: 0.4s;
+}
+
+.crud .crud-button:hover {
+  background: #8dbad2;
+}

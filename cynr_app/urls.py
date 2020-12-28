@@ -27,6 +27,7 @@ urlpatterns = [
         paginate_by = 4,
         extra_context={'menu_navegacion':menu.MENU_NAVEGACION,
                         'contenido': contenidos.contextoPagInst,
+                        'total_registros': contenidos.querysetPagInst.count(),
                       },
         template_name = 'cynr_app/base_paginas_crud.html',
                                 ) , 
@@ -47,8 +48,6 @@ urlpatterns = [
         model = Instituciones,
         context_object_name = 'obj',
         success_url = reverse_lazy('cynr_app:instituciones_crud'),
-        extra_context={'contenido': contenidos.contextoPagInst,
-                      },
         form_class = forms.FormInstitucion,
         template_name = 'cynr_app/modalFormItem.html',
                                 ) , 
@@ -60,6 +59,7 @@ urlpatterns = [
         paginate_by = 4,
         extra_context={'menu_navegacion':menu.MENU_NAVEGACION,
                         'contenido': contenidos.contextoDocPagInst,
+                        'total_registros': contenidos.querysetPagDocInst.count(),
                       },
         template_name = 'cynr_app/base_paginas_crud.html',
                                 ) , 
@@ -69,6 +69,7 @@ urlpatterns = [
         path('doc_instituciones_crud_crear',views.BaseCreateView.as_view(
         success_url = reverse_lazy('cynr_app:doc_instituciones_crud'),
         extra_context={'contenido': contenidos.contextoDocPagInst,
+                       'total_registros': contenidos.querysetInfraestructura.count(),
                       },
         form_class = forms.FormDocInstitucionales,
         template_name = 'cynr_app/modalFormItem.html',
@@ -94,14 +95,15 @@ urlpatterns = [
         paginate_by = 4,
         extra_context={'menu_navegacion':menu.MENU_NAVEGACION,
                         'contenido': contenidos.contextoInfraestructura,
-                        #'geoformmedia':gisforms.OSMWidget().media.render(),
+                        'total_registros': contenidos.querysetInfraestructura.count(),
+                        'geoformmedia':gisforms.OSMWidget().media.render(),
                       },
         template_name = 'cynr_app/base_paginas_crud.html',
                                 ) , 
         name='infraestructura_crud'
         ),    
     # CREAR INFRAESTRUCTURA
-        path('infraestructura_crud_crear',views.BaseCreateView.as_view(
+        path('infraestructura_crud_crear',views.BaseInfraestructuraCreateView.as_view(
         success_url = reverse_lazy('cynr_app:infraestructura_crud'),
         extra_context={'contenido': contenidos.contextoInfraestructura,
                       },
@@ -111,14 +113,14 @@ urlpatterns = [
         name='infraestructura_crud_crear'
         ),
     # EDITAR INFRAESTRUCTURA
-        path('infraestructura_crud_editar/<int:pk>', UpdateView.as_view(
+        path('infraestructura_crud_editar/<int:pk>', views.BaseInfraestructuraUpdateView.as_view(
         model = Infraestructura,
         context_object_name = 'obj',
         success_url = reverse_lazy('cynr_app:infraestructura_crud'),
         extra_context={'contenido': contenidos.contextoInfraestructura,
                       },
         form_class = forms.FormInfraestructura,
-        template_name = 'cynr_app/modalFormItem.html',
+        template_name = 'cynr_app/modalFormItemGeo.html',
                                 ) , 
         name='infraestructura_crud_editar'
         ),
@@ -129,6 +131,7 @@ urlpatterns = [
         paginate_by = 4,
         extra_context={'menu_navegacion':menu.MENU_NAVEGACION,
                         'contenido': contenidos.contextoObraToma,
+                        'total_registros': contenidos.querysetObraToma.count(),
                         'geoformmedia':gisforms.OSMWidget().media.render(),
                       },
         template_name = 'cynr_app/base_paginas_crud.html',
@@ -165,6 +168,7 @@ urlpatterns = [
         paginate_by = 4,
         extra_context={'menu_navegacion':menu.MENU_NAVEGACION,
                         'contenido': contenidos.contextoCyNR,
+                        'total_registros': contenidos.querysetCyNR.count(),
                       },
         template_name = 'cynr_app/base_paginas_crud.html',
                                 ) , 
@@ -200,18 +204,29 @@ urlpatterns = [
         paginate_by = 4,
         extra_context={'menu_navegacion':menu.MENU_NAVEGACION,
                         'contenido': contenidos.contextoDoc,
+                        'total_registros': contenidos.querysetDoc.count(),
                       },
         template_name = 'cynr_app/base_paginas_crud.html',
                                 ) , 
         name='documentos_crud'
         ),
     # CREAR DOCUMENTOS
-        path('documentos_crud_crear',views.BaseCreateView.as_view(
+    #    path('documentos_crud_crear',views.BaseCreateView.as_view(
+    #    success_url = reverse_lazy('cynr_app:documentos_crud'),
+    #    extra_context={'contenido': contenidos.contextoDoc,
+    #                  },
+    #    form_class = forms.FormDoc,
+    #    template_name = 'cynr_app/modalFormItem.html',
+    #                            ) , 
+    #    name='documentos_crud_crear'
+    #    ),
+    # CREAR DOCUMENTOS
+        path('documentos_crud_crear',views.BaseCreateDoc.as_view(
         success_url = reverse_lazy('cynr_app:documentos_crud'),
         extra_context={'contenido': contenidos.contextoDoc,
                       },
         form_class = forms.FormDoc,
-        template_name = 'cynr_app/modalFormItem.html',
+        template_name = 'cynr_app/modalFormItemPadreHijo.html',
                                 ) , 
         name='documentos_crud_crear'
         ),
@@ -232,9 +247,41 @@ urlpatterns = [
         template_name="cynr_app/base_pagina_geomanio.html",
         extra_context={'contenido': contenidos.contextoGeomanio,}
         ), name='geomanio'),
-    # TUTORIAL CRUD CON LOCAL STORAGE
-    path('crud_documento', TemplateView.as_view(
-        template_name="cynr_app/crud_documento.html",
-        ), name='crud_documento'),     
+   #----------------------------------------------------------------------------
+   # CRUD NOTICIAS
+    path('noticias_crud/',ListView.as_view(
+        queryset = contenidos.querysetNot,
+        paginate_by = 4,
+        extra_context={'menu_navegacion':menu.MENU_NAVEGACION,
+                        'contenido': contenidos.contextoNot,
+                        'total_registros': contenidos.querysetNot.count(),
+                      },
+        template_name = 'cynr_app/base_paginas_crud.html',
+                                ) , 
+        name='noticias_crud'
+        ),
+    # CREAR NOTICIAS
+        path('noticias_crud_crear',views.BaseCreateView.as_view(
+        success_url = reverse_lazy('cynr_app:noticias_crud'),
+        extra_context={'contenido': contenidos.contextoNot,
+                      },
+        form_class = forms.FormNot,
+        template_name = 'cynr_app/modalFormItem.html',
+                                ) , 
+        name='noticias_crud_crear'
+        ),
+    # EDITAR NOTICIAS
+        path('noticias_crud_editar/<int:pk>', UpdateView.as_view(
+        model = Noticias,
+        context_object_name = 'obj',
+        success_url = reverse_lazy('cynr_app:noticas_crud'),
+        extra_context={'contenido': contenidos.contextoNot,
+                      },
+        form_class = forms.FormNot,
+        template_name = 'cynr_app/modalFormItem.html',
+                                ) , 
+        name='noticias_crud_editar'
+        ),
+
 ]
 

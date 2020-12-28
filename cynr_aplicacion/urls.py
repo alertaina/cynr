@@ -20,7 +20,6 @@ from cynr_app import menu
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('cynr_app/', include('cynr_app.urls')),
-    path('cynr_admin/', include('cynr_admin.urls')), # tablero para la carga de info
     #path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/login/', auth_views.LoginView.as_view(extra_context={'menu_navegacion':menu.MENU_NAVEGACION}),name='login'),
     path('accounts/logout/', auth_views.LogoutView.as_view(),name='logout'),

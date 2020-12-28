@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.postgres.forms import SimpleArrayField
 from .models import *
+from django.forms.models import inlineformset_factory
 #from django.forms import MultiWidget, TextInput
 #from django import forms as forms2
 #import pickle
@@ -94,11 +95,11 @@ class FormInstitucion(forms.ModelForm):
      self.fields['logo'].widget.attrs.update({'class': 'form-control-file'})
      self.fields['direccion'].widget.attrs.update({'class': 'form-control','row':3})
      self.fields['tel'].widget.attrs.update({'class': 'form-control'})
-     self.fields['jurisdiccion'].widget.attrs.update({'class': 'form-control'})
+     self.fields['alc_geografico'].widget.attrs.update({'class': 'form-control'})
 
     class Meta:
         model = Instituciones
-        fields=['nombre','categoria','presentacion','pag_web','logo','direccion','tel','jurisdiccion']
+        fields=['nombre','categoria','presentacion','pag_web','logo','direccion','tel','alc_geografico']
 #-----------------------------------------------------------------------------
 # CREAR Y EDITAR DOCUMENTO SOBRE INSTITUCION.
 #-----------------------------------------------------------------------------
@@ -116,17 +117,15 @@ class FormDocInstitucionales(forms.ModelForm):
         widget=forms.Select(attrs={'class':"form-control",'placeholder': 'Categoria','rows':1},choices=CHOICE_CATEGORIAS))
         self.fields['link_doc'].widget.attrs.update({'class': 'form-control'})
         self.fields['arch_doc'].widget.attrs.update({'class': 'form-control-file'})
-        self.fields['jurisdiccion'].widget.attrs.update({'class': 'form-control'})
+        self.fields['alc_geografico'].widget.attrs.update({'class': 'form-control'})
     class Meta:
         model = DocInstitucionales
-        fields=['nombre','id_inst','presentacion','categoria','link_doc','arch_doc','jurisdiccion']
+        fields=['nombre','id_inst','presentacion','categoria','link_doc','arch_doc','alc_geografico']
 
 #-----------------------------------------------------------------------------
 #  INFRAESTRUCTURA.
 #-----------------------------------------------------------------------------
 class FormInfraestructura(forms.ModelForm):
-    #arch_geometria = forms.FileField()
-    geometria = forms.CharField()
     def __init__(self, *args, **kwargs):
         categorias = GruposCategorias.objects.get(grupo='Infraestructura').idGruposCategorias.values_list('categoria')
         CHOICE_CATEGORIAS = [] # diccionario del menu
@@ -142,12 +141,6 @@ class FormInfraestructura(forms.ModelForm):
         #self.fields['geometria'].widget.attrs.update({'class': 'form-control-file'})
         
         #self.fields['geom'].widget.attrs.update({'template_name':'cynr_app/geomFormItem.html','class': 'form-control'})
-        #self.fields['geom'].widget.attrs.update({'map_width': 800,
-        #       'map_height': 400,
-        #       'default_lat': -31.747790,
-       #        'default_lon': -60.511456,
-        #       'default_zoom': 6,
-        #       'map_srid':4326})
         self.fields['ficha_tec'].widget.attrs.update({'class': 'form-control-file'})
         
     class Meta:
@@ -218,16 +211,58 @@ class FormDoc(forms.ModelForm):
         for choice in categorias:
             CHOICE_CATEGORIAS.append((choice[0],choice[0]))
         super(FormDoc, self).__init__(*args, **kwargs)
-        self.fields['id_infra'].widget.attrs.update({'class': 'form-control'})
-        self.fields['id_cynr'].widget.attrs.update({'class': 'form-control'})
+        self.fields['id_contacto'].widget.attrs.update({'class': 'form-control'})
         self.fields['categoria']=forms.CharField(label='Categoria', required=False, help_text='Seleccione la categoria',
         widget=forms.Select(attrs={'class':"form-control",'placeholder': 'Categoria','rows':1},choices=CHOICE_CATEGORIAS))
         self.fields['titulo'].widget.attrs.update({'class': 'form-control','type':"text"})
         self.fields['descripcion'].widget.attrs.update({'class': 'form-control','row':3})
+        #self.fields['fecha_hora'].widget.attrs.update({'class': 'form-control'})
+        #self.fields['fecha_hora']=forms.DateTimeField(input_formats=["%m/%d/%Y %I:%M %p"],help_text='Fecha y Hora de creación',widget=forms.DateTimeInput(attrs={'class': 'form-control'}))
+        self.fields['fecha_hora']=forms.DateTimeField(help_text='Fecha y Hora de creación',widget=forms.DateTimeInput(attrs={'type': 'datetime-local','class': 'form-control'}))
         #self.fields['documento'].widget.attrs.update({'class': 'form-control','row':3})
         #self.fields['documento']=DocField()
         #self.fields['documento']=forms2.CharField(max_length=32, widget =forms2.MultiWidget(widgets=[forms2.TextInput,forms2.TextInput]))
                 
     class Meta:
         model = Documentos
-        fields=['id_infra','id_cynr','categoria','titulo','descripcion','documento']
+        fields=['id_contacto','categoria','titulo','descripcion','fecha_hora']
+
+
+#-----------------------------------------------------------------------------
+#  CONTENIDOS DOCUMENTOS.
+#-----------------------------------------------------------------------------
+class FormContDoc(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+       super(FormContDoc, self).__init__(*args, **kwargs)
+       #self.fields['id_doc'].widget.attrs.update({'class': 'form-control'})
+       self.fields['id_infra'].widget.attrs.update({'class': 'form-control'})
+       self.fields['id_cynr'].widget.attrs.update({'class': 'form-control'})
+       self.fields['titulo'].widget.attrs.update({'class': 'form-control'})
+       self.fields['contenido'].widget.attrs.update({'class': 'form-control'})
+
+    class Meta:
+        model = ContDocumentos
+        exclude = ()
+        #fields=['id_infra','id_cynr','titulo','contenido']
+DocContDocFormSet = inlineformset_factory(
+    Documentos, ContDocumentos, form=FormContDoc, 
+    fields=['id_infra','id_cynr','titulo','contenido'], extra=1, can_delete=True
+    )
+
+#-----------------------------------------------------------------------------
+# CREAR Y EDITAR NOTICIAS.
+#-----------------------------------------------------------------------------
+class FormNot(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(FormNot, self).__init__(*args, **kwargs)
+        self.fields['id_infra'].widget.attrs.update({'class': 'form-control'})
+        self.fields['id_inst'].widget.attrs.update({'class': 'form-control'})
+        self.fields['encabezado'].widget.attrs.update({'class': 'form-control'})
+        self.fields['presentacion'].widget.attrs.update({'class': 'form-control'})
+        self.fields['fecha_hora']=forms.DateTimeField(help_text='Fecha y Hora de creación',widget=forms.DateTimeInput(attrs={'type': 'datetime-local','class': 'form-control'}))
+        self.fields['link_not'].widget.attrs.update({'class': 'form-control'})
+        self.fields['arch_not'].widget.attrs.update({'class': 'form-control'})
+ 
+    class Meta:
+        model = Noticias
+        fields=['id_infra','id_inst','encabezado','presentacion','fecha_hora','link_not','arch_not']

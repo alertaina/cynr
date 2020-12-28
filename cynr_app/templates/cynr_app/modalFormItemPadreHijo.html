@@ -10,9 +10,9 @@
       </div>
       <div class="modal-body">
         {% if obj %}
-          <form method="post" action='{% url contenido.url_editar obj.pk %}' class="php-email-form">
+          <form id="form-container" method="post" action='{% url contenido.url_editar obj.pk %}' class="php-email-form">
         {% else %}
-          <form method="post" action='{% url contenido.url_crear %}' class="php-email-form">
+          <form id="form-container" method="post" action='{% url contenido.url_crear %}' class="php-email-form">
         {% endif %}  
           {% csrf_token %}
             {% for field in form %}     
@@ -27,21 +27,47 @@
               </div>
             {% endfor %}
             <!-- Este es el manejador del inline --> 
-            {{ children.management_form }} 
-              {% for form_item in children %}
-                {% for field in form_item %}     
+            {{ hijos.management_form }} 
+              {% for form in hijos.forms %}
+              <div class="hijo-form">
+                {% for field in form.visible_fields %}     
                   <div class="form-group">
                     <div class="col-md-12"><label class="control-label" for="{{ field.id_for_label }}"><dt>{{ field.label }}</dt></label></div>
                     <div class="col-md-12">{{field}}</div>
                   </div>
                 {% endfor %}
+              </div>
               {% endfor %}
+              <button id="add-form" type="button">Adicionar</button>
             {% if obj %}
               <button type="submit" class="submit-btn btn btn-primary">Actualizar</button>
             {% else %}
               <button type="submit" class="submit-btn btn btn-primary">Crear</button>
             {% endif %}
-        </form>					
+        </form>
+        <script>
+          let referencia = 'idContDoc'
+          let hijoForm = document.querySelectorAll(".hijo-form")
+          let container = document.querySelector("#form-container")
+          let addButton = document.querySelector("#add-form")
+          let totalForms = document.querySelector("#id_"+referencia+"-TOTAL_FORMS")
+  
+          let formNum = hijoForm.length-1
+          addButton.addEventListener('click', addForm)
+  
+          function addForm(e){
+              e.preventDefault()
+  
+              let newForm = hijoForm[0].cloneNode(true)
+              let formRegex = RegExp(`${referencia}-(\\d){1}-`,'g')
+  
+              formNum++
+              newForm.innerHTML = newForm.innerHTML.replace(formRegex, `${referencia}-${formNum}-`)
+              container.insertBefore(newForm, addButton)
+              
+              totalForms.setAttribute('value', `${formNum+1}`)
+          }
+      </script>					
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
