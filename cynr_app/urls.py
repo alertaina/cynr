@@ -3,7 +3,6 @@ from django.urls import reverse , reverse_lazy
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView
-from django.contrib.gis import forms as gisforms
 from . import views
 from . import menu
 from .models import *
@@ -14,18 +13,21 @@ app_name = 'cynr_app'
 urlpatterns = [
     # Inicio
     #path('index', views.Index.as_view(), name='index'),
-    path('index', views.BasePaginas.as_view(template_name="cynr_app/index.html"), name='index'),
-    path('', views.BasePaginas.as_view(template_name="cynr_app/index.html")),
+    path('index', views.PaginasInicioTemplateView.as_view(template_name="cynr_app/index.html"), name='index'),
+    path('', views.PaginasInicioTemplateView.as_view(template_name="cynr_app/index.html")),
 
     # Registro de Usuarios
-    path('signup/', views.SignUp.as_view(), name='signup'),
+    path('signup', views.SignUp.as_view(), name='signup'),
 
     # CRUD INSTITUCIONES
     path('instituciones_crud/',ListView.as_view(
         #model = Instituciones,
         queryset = contenidos.querysetPagInst,
+        #queryset = contenidos.querysetObraToma,
         paginate_by = 4,
         extra_context={'menu_navegacion':menu.MENU_NAVEGACION,
+                       # 'contenido': contenidos.contextoObraToma,
+                       # 'total_registros': contenidos.querysetObraToma.count(),
                         'contenido': contenidos.contextoPagInst,
                         'total_registros': contenidos.querysetPagInst.count(),
                       },
@@ -34,12 +36,22 @@ urlpatterns = [
         name='instituciones_crud'
         ),
     # CREAR INSTITUCION
-        path('instituciones_crud_crear',views.BaseCreateView.as_view(
+    #    path('instituciones_crud_crear',views.BaseCreateView.as_view(
+    #    success_url = reverse_lazy('cynr_app:instituciones_crud'),
+    #    extra_context={'contenido': contenidos.contextoPagInst,
+    #                  },
+    #    form_class = forms.FormInstitucion,
+    #    template_name = 'cynr_app/modalFormItem.html',
+    #                            ) , 
+    #    name='instituciones_crud_crear'
+    #    ),
+    # CREAR INSTITUCION
+        path('instituciones_crud_crear',views.InstitucionesCreateView.as_view(
         success_url = reverse_lazy('cynr_app:instituciones_crud'),
         extra_context={'contenido': contenidos.contextoPagInst,
                       },
         form_class = forms.FormInstitucion,
-        template_name = 'cynr_app/modalFormItem.html',
+        template_name = 'cynr_app/modalFormItemWithFile.html',
                                 ) , 
         name='instituciones_crud_crear'
         ),
@@ -76,6 +88,7 @@ urlpatterns = [
                                 ) , 
         name='doc_instituciones_crud_crear'
         ),
+
     # EDITAR DOC INSTITUCION
         path('doc_instituciones_crud_editar/<int:pk>', UpdateView.as_view(
         model = Instituciones,
@@ -96,7 +109,6 @@ urlpatterns = [
         extra_context={'menu_navegacion':menu.MENU_NAVEGACION,
                         'contenido': contenidos.contextoInfraestructura,
                         'total_registros': contenidos.querysetInfraestructura.count(),
-                        'geoformmedia':gisforms.OSMWidget().media.render(),
                       },
         template_name = 'cynr_app/base_paginas_crud.html',
                                 ) , 
@@ -126,39 +138,38 @@ urlpatterns = [
         ),
     #----------------------------------------------------------------------
     # CRUD OBRA DE TOMA
-    path('obra_de_toma_crud/',ListView.as_view(
+    path('obras_de_toma_crud/',ListView.as_view(
         queryset = contenidos.querysetObraToma,
         paginate_by = 4,
         extra_context={'menu_navegacion':menu.MENU_NAVEGACION,
                         'contenido': contenidos.contextoObraToma,
                         'total_registros': contenidos.querysetObraToma.count(),
-                        'geoformmedia':gisforms.OSMWidget().media.render(),
                       },
         template_name = 'cynr_app/base_paginas_crud.html',
                                 ) , 
-        name='obra_de_toma_crud'
+        name='obras_de_toma_crud'
         ),    
     # CREAR OBRA DE TOMA
-        path('obra_de_toma_crud_crear',views.BaseObraTomaCreateView.as_view(
-        success_url = reverse_lazy('cynr_app:obra_de_toma_crud'),
+        path('obras_de_toma_crud_crear',views.BaseObraTomaCreateView.as_view(
+        success_url = reverse_lazy('cynr_app:obras_de_toma_crud'),
         extra_context={'contenido': contenidos.contextoObraToma,
                       },
-        form_class = forms.FormInfraestructura,
-        template_name = 'cynr_app/modalFormItemPadreHijo.html',
+        #form_class = forms.FormInfraestructura,
+        #template_name = 'cynr_app/modalFormItemObraToma.html',
                                 ) , 
-        name='obra_de_toma_crud_crear'
+        name='obras_de_toma_crud_crear'
         ),
     # EDITAR OBRA DE TOMA
-        path('obra_de_toma_crud_editar/<int:pk>', UpdateView.as_view(
-        model = Instituciones,
+        path('obras_de_toma_crud_editar/<int:pk>', UpdateView.as_view(
+        model = Infraestructura,
         context_object_name = 'obj',
-        success_url = reverse_lazy('cynr_app:obra_de_toma_crud'),
+        success_url = reverse_lazy('cynr_app:obras_de_toma_crud'),
         extra_context={'contenido': contenidos.contextoObraToma,
                       },
         form_class = forms.FormObraToma,
         template_name = 'cynr_app/modalFormItemPadreHijo.html',
                                 ) , 
-        name='obra_de_toma_crud_editar'
+        name='obras_de_toma_crud_editar'
         ),
    #----------------------------------------------------------------------------
    # CRUD CYNR
@@ -199,29 +210,18 @@ urlpatterns = [
    #----------------------------------------------------------------------------
    # CRUD DOCUMENTOS
     path('documentos_crud/',ListView.as_view(
-        #model = Instituciones,
         queryset = contenidos.querysetDoc,
         paginate_by = 4,
         extra_context={'menu_navegacion':menu.MENU_NAVEGACION,
                         'contenido': contenidos.contextoDoc,
                         'total_registros': contenidos.querysetDoc.count(),
                       },
-        template_name = 'cynr_app/base_paginas_crud.html',
+        template_name = 'cynr_app/base_paginas_crud_doc.html',
                                 ) , 
         name='documentos_crud'
         ),
-    # CREAR DOCUMENTOS
-    #    path('documentos_crud_crear',views.BaseCreateView.as_view(
-    #    success_url = reverse_lazy('cynr_app:documentos_crud'),
-    #    extra_context={'contenido': contenidos.contextoDoc,
-    #                  },
-    #    form_class = forms.FormDoc,
-    #    template_name = 'cynr_app/modalFormItem.html',
-    #                            ) , 
-    #    name='documentos_crud_crear'
-    #    ),
-    # CREAR DOCUMENTOS
-        path('documentos_crud_crear',views.BaseCreateDoc.as_view(
+     # CREAR DOCUMENTOS
+        path('documentos_crud_crear',views.BaseCreateView.as_view(
         success_url = reverse_lazy('cynr_app:documentos_crud'),
         extra_context={'contenido': contenidos.contextoDoc,
                       },
@@ -231,7 +231,7 @@ urlpatterns = [
         name='documentos_crud_crear'
         ),
     # EDITAR DOCUMENTOS
-        path('documentos_crud_editar/<int:pk>', UpdateView.as_view(
+        path('documentos_crud_editar/<int:pk>', views.BaseUpdateView.as_view(
         model = Documentos,
         context_object_name = 'obj',
         success_url = reverse_lazy('cynr_app:documentos_crud'),
@@ -242,9 +242,15 @@ urlpatterns = [
                                 ) , 
         name='documentos_crud_editar'
         ),
+   #----------------------------------------------------------------------------
+   # CRUD CONTENIDO DOCUMENTO
+    path('cont_documento_crud/<int:pk_doc>',views.ContDocView.as_view(), 
+        name='cont_documento_crud'
+        ),
+ 
     # PAGINA GEOMANIO
     path('geomanio', views.BasePaginas.as_view(
-        template_name="cynr_app/base_pagina_geomanio.html",
+        template_name="cynr_app/crud_geomanio.html",
         extra_context={'contenido': contenidos.contextoGeomanio,}
         ), name='geomanio'),
    #----------------------------------------------------------------------------

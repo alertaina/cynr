@@ -1,0 +1,34 @@
+            <div class="table-responsive">
+              <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  {% for encabezado in contenido.encabezados %}
+                    <th>{{encabezado}}</th>
+                  {% endfor %}
+                </tr>
+              </thead>
+              <tbody id="myTable">
+                  {% for registro in object_list %}
+                  <tr>
+                    {% for key,value in registro.items %}
+                    {% if key != "id" %}
+                    <td>{{value}}</td>
+                    {% endif %} 
+                    {% endfor %}
+                    <td>
+                    <a href="" class="edit" data-toggle="modal"><i class="far fa-eye" data-toggle="tooltip" title="Ver" style=" color: black;">&#xE254;</i></a> 
+                    <a href="#" onclick="return abrir_modal('{% url contenido.url_editar registro.id %}')" class="edit" data-toggle="modal"><i class="far fa-edit" data-toggle="tooltip" title="Editar" style=" color: green;">&#xE254;</i></a>
+                    <a href="" class="delete" data-toggle="modal"><i class="far fa-trash-alt" data-toggle="tooltip" title="Borrar"  style=" color: red;">&#xE872;</i></a>
+                    <a href="{% url contenido.url_cont registro.id %}"><i class="far fa-file-alt" title="Contenido" style=" color: green;">&#xE254;</i></a>
+                    </td>
+                  </tr>
+                  {% endfor %}               
+              </tbody>
+            </table>
+            </div><!-- ======= Fin Tabla CRUD ======= -->
+
+$(document).ready(function() {
+    $('#table').DataTable( {
+        select: true
+    } );
+} );

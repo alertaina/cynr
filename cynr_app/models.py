@@ -1,4 +1,4 @@
-#from django.db import models
+from django.db import models
 from django.contrib.gis.db import models
 from django.contrib.auth.models import User
 from  django.utils.timezone import now
@@ -42,7 +42,7 @@ class Instituciones(models.Model):
     categoria = models.CharField(max_length=100,default=None,blank=False)
     presentacion = models.TextField(default=None,blank=True,verbose_name='Presentación')
     pag_web = models.URLField(max_length = 200,blank=True,verbose_name='Página Web')
-    logo = models.ImageField(upload_to='cynr_app/logos',blank=True,verbose_name='Logo')
+    logo = models.ImageField(upload_to='cynr_app/logos/',blank=True,verbose_name='Logo')
     direccion = models.CharField(max_length=200,default=None,blank=False,verbose_name='Dirección')
     tel = models.CharField(max_length=50,default=None,blank=False,verbose_name='Teléfono')
     alc_geografico = models.CharField(max_length=200,default=None,blank=False,verbose_name='Alcance Geográfico')
@@ -78,19 +78,28 @@ class DocInstitucionales(models.Model):
 
 
 ##########################################################################
-# 4 CONTACTOS REGISTRADOS
+# 4 CONTACTOS REGISTRADOS Y NO REGISTRADOS
 #-------------------------------------------------------------------------
 class Contactos(models.Model):
     # relacion uno a uno con los usuarios registrados
-    user = models.OneToOneField(User,related_name='contacto_user', on_delete=models.CASCADE)
-    id_inst = models.ForeignKey(Instituciones,related_name='idContInstitucion',null=True,on_delete=models.SET_NULL,db_column='id_inst')
+    user = models.OneToOneField(User,related_name='contacto_user',null=True, blank=True, on_delete=models.SET_NULL)
+    nombre = models.CharField(max_length=250,default=None,blank=True,verbose_name='Nombre')
+    apellido = models.CharField(max_length=250,default=None,blank=True,verbose_name='Apellido')
+    tel_particular = models.CharField(max_length=250,default=None,blank=True,verbose_name='Telefono Paricular')
+    email_particular = models.EmailField(max_length=254,default=None,blank=True,verbose_name='Email Particular')
+    institucion_no_reg = models.CharField(max_length=250,default=None,blank=True,verbose_name='Institución no Registrada')
+    id_inst = models.ForeignKey(Instituciones,related_name='idContInstitucion',null=True,blank=True,on_delete=models.SET_NULL,db_column='id_inst')
     cargo = models.CharField(max_length=200,default=None,blank=True,verbose_name='Cargo')
     dir_inst = models.CharField(max_length=200,default=None,blank=True,verbose_name='Dirección Institucional')
     tel_inst = models.CharField(max_length=50,default=None,blank=True,verbose_name='Teléfono Institucional')
     email_inst = models.EmailField(max_length=254,default=None,blank=True,verbose_name='Email Institucional')
 
     def __str__(self):
-        return self.user.username
+        if self.user:
+            return self.user.username
+        else:
+            pass
+            return '{} {}'.format(self.nombre, self.apellido)
 
     class Meta:
         managed = True
@@ -108,7 +117,7 @@ class Infraestructura(models.Model):
     geom = models.GeometryCollectionField(null=True,verbose_name='Georreferenciación',srid=4326)
     id_inst = models.ForeignKey(Instituciones,related_name='idInfInstitucion',null=True,on_delete=models.SET_NULL,blank=True,db_column='id_inst')
     # file will be uploaded to MEDIA_ROOT / uploads 
-    ficha_tec = models.FileField(upload_to ='fichas_tecnicas/',blank=True)
+    ficha_tec = models.FileField(upload_to ='cynr_app/fichas_tecnicas/',blank=True)
  
     def __str__(self):
         return self.nombre
@@ -179,11 +188,11 @@ class ContDocumentos(models.Model):
     id_doc = models.ForeignKey(Documentos,related_name='idContDoc',on_delete=models.CASCADE,null=False, blank=False,db_column='id_doc',verbose_name='Documento')
     id_infra = models.ForeignKey(Infraestructura,related_name='idInfraDocCont',null=True,on_delete=models.SET_NULL, blank=True,db_column='id_infra',verbose_name='Infraestructura')
     id_cynr =  models.ForeignKey(CyNR,related_name='idCyNRDocCont',null=True,on_delete=models.SET_NULL, blank=True,db_column='id_cynr',verbose_name='Cota o Nivel')   
-    titulo = models.TextField(default=None,blank=False)
+    titulo = models.TextField(default=None,blank=False,verbose_name='Título')
     contenido = models.TextField(default=None,blank=False,verbose_name='Contenido')
 
     def __str__(self):
-        return '{}@{}'.format(self.id_doc.nombre, self.titulo)
+        return '{}@{}'.format(self.id_doc.titulo, self.titulo)
 
     class Meta:
         managed = True
@@ -195,7 +204,7 @@ class ContDocumentos(models.Model):
 class Imagenes(models.Model):
     autor = models.ForeignKey(User,null=True,on_delete=models.SET_NULL)    
     id = models.AutoField(primary_key=True)
-    id_cont = models.ForeignKey(Documentos,related_name='idContImg',on_delete=models.CASCADE,null=False, blank=False,db_column='id_cont',verbose_name='Archivo')
+    id_cont = models.ForeignKey(ContDocumentos,related_name='idContImg',on_delete=models.CASCADE,null=False, blank=False,db_column='id_cont',verbose_name='Archivo')
     categoria = models.TextField(default=None,blank=False)
     descripcion = models.TextField(default=None,blank=False)
     ilustracion = models.BooleanField(verbose_name='Ilustra Documento' ) # para seleccionar la imagen que ilustre el documento
@@ -251,5 +260,21 @@ class Noticias(models.Model):
         db_table = 'noticias'   
 
 
+##########################################################################
+# 12 CARRUSEL DE LA PÁGINA PRINCIPAL
+#-------------------------------------------------------------------------
 
+class Carrusel(models.Model):
+  id = models.AutoField(primary_key=True)
+  encabezado = models.CharField(max_length=250,default=None,blank=False,verbose_name='Encabezado')
+  texto = models.TextField(default=None,blank=False,verbose_name='Texto')  
+  leer_mas_link = models.URLField(max_length = 500,blank=True,verbose_name='Link Leer Más')  
+  def __str__(self):
+    return self.encabezado
+  class Meta:
+    managed = True
+    db_table = 'carrusel'  
 
+##########################################################################
+# 13 SECCIONES DE LA PÁGINA PRINCIPAL
+#-------------------------------------------------------------------------

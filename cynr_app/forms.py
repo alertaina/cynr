@@ -3,48 +3,10 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.postgres.forms import SimpleArrayField
 from .models import *
+
 from django.forms.models import inlineformset_factory
-#from django.forms import MultiWidget, TextInput
-#from django import forms as forms2
-#import pickle
-#import json
-#class MultiWidgetBasic(forms2.widgets.MultiWidget):
-#    def __init__(self, attrs=None):
-#        widgets = [forms2.TextInput(),
-#                   forms2.TextInput()]
-#        super(MultiWidgetBasic, self).__init__(widgets, attrs)
 
-#    def decompress(self, value):
-#        if value:
-#            return pickle.loads(value)
-#        else:
-#            return ['', '']
-
-#class WidgetDoc(forms2.widgets.MultiWidget):
-#    def __init__(self, attrs=None):
-#        widgets = {'titulo':forms2.TextInput(attrs={'required': False,'class':"form-control",'name':"titulo"}),
-#                   'contenido':forms2.TextInput(attrs={'required': False,'class':"form-control",'name':"contenido"})
-#                  }
-#        super(WidgetDoc, self).__init__(widgets, attrs)
-
-#    def decompress(self, value):
-#        if value:
-#            return json.dumps(value) # trasnforma un diccionario python en json
-#        else:
-#            return ["", ""]
-
-#class DocField(forms2.fields.MultiValueField):
-#    widget = WidgetDoc
-
-#    def __init__(self, *args, **kwargs):
-#        list_fields = [forms2.fields.CharField(max_length=31),
-#                       forms2.fields.CharField(max_length=31)]
-#        super(DocField, self).__init__(list_fields, *args, **kwargs)
-#
-#    def compress(self, values):
-        ## compress list to single object                                               
-        ## eg. date() >> u'31/12/2012'                                                  
-        #return json.dumps(values)
+from django.forms.models import BaseInlineFormSet
 
 
 #-----------------------------------------------------------------------------
@@ -156,7 +118,7 @@ class FormObraToma(forms.ModelForm):
         CHOICE_TIPO = [] 
         for choice in tipo:
             CHOICE_TIPO.append((choice[0],choice[0]))
-        funcionamiento = GruposCategorias.objects.get(grupo='Funcionamiento de Obra').idGruposCategorias.values_list('categoria')
+        funcionamiento = GruposCategorias.objects.get(grupo='Funcionamiento Obra de Toma').idGruposCategorias.values_list('categoria')
         CHOICE_FUNCIONAMIENTO = [] 
         for choice in funcionamiento:
             CHOICE_FUNCIONAMIENTO.append((choice[0],choice[0]))
@@ -183,8 +145,15 @@ class FormObraToma(forms.ModelForm):
 
         class Meta:
             model = ObrasToma
-            fields=['tipo','funcionamiento','uso','estado','desc_estado']
-
+            #fields=['tipo','funcionamiento','uso','estado','desc_estado']
+            exclude = ()
+#--------------------------------------------------------------------------------
+# FORMSETS PARA CARGAR REGISTROS PADRES E HIJOS: INFRAESTRUCTURA - OBRAS DE TOMA
+#--------------------------------------------------------------------------------
+ObraTomaFormset = inlineformset_factory(
+    Infraestructura, ObrasToma,form=FormObraToma,
+    fields=['tipo','funcionamiento','uso','estado','desc_estado'],
+    extra=1,can_delete=False)
 #-----------------------------------------------------------------------------
 # CREAR Y EDITAR COTAS Y NIVELES DE REFERENCIA.
 #-----------------------------------------------------------------------------
@@ -216,18 +185,33 @@ class FormDoc(forms.ModelForm):
         widget=forms.Select(attrs={'class':"form-control",'placeholder': 'Categoria','rows':1},choices=CHOICE_CATEGORIAS))
         self.fields['titulo'].widget.attrs.update({'class': 'form-control','type':"text"})
         self.fields['descripcion'].widget.attrs.update({'class': 'form-control','row':3})
-        #self.fields['fecha_hora'].widget.attrs.update({'class': 'form-control'})
-        #self.fields['fecha_hora']=forms.DateTimeField(input_formats=["%m/%d/%Y %I:%M %p"],help_text='Fecha y Hora de creación',widget=forms.DateTimeInput(attrs={'class': 'form-control'}))
         self.fields['fecha_hora']=forms.DateTimeField(help_text='Fecha y Hora de creación',widget=forms.DateTimeInput(attrs={'type': 'datetime-local','class': 'form-control'}))
-        #self.fields['documento'].widget.attrs.update({'class': 'form-control','row':3})
-        #self.fields['documento']=DocField()
-        #self.fields['documento']=forms2.CharField(max_length=32, widget =forms2.MultiWidget(widgets=[forms2.TextInput,forms2.TextInput]))
+        self.fields['fecha_hora'].input_formats = ["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"]
                 
     class Meta:
         model = Documentos
         fields=['id_contacto','categoria','titulo','descripcion','fecha_hora']
 
+#-----------------------------------------------------------------------------
+#  IMÁGENES DE CONTENIDOS.
+#-----------------------------------------------------------------------------
+class ImgContDoc(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+       super(ImgContDoc, self).__init__(*args, **kwargs)
+       #self.fields['id_doc'].widget.attrs.update({'class': 'form-control'})
+       self.fields['categoria'].widget.attrs.update({'class': 'form-control'})
+       self.fields['descripcion'].widget.attrs.update({'class': 'form-control'})
+       self.fields['ilustracion'].widget.attrs.update({'class': 'form-control'})
+       self.fields['imagen'].widget.attrs.update({'class': 'form-control'})
 
+    class Meta:
+        model = Imagenes
+        exclude = ()
+
+ContImgContFormSet = inlineformset_factory(
+    ContDocumentos, Imagenes, form=ImgContDoc, 
+    fields=['categoria','descripcion','ilustracion','imagen'], extra=1, can_delete=True
+    )   
 #-----------------------------------------------------------------------------
 #  CONTENIDOS DOCUMENTOS.
 #-----------------------------------------------------------------------------
@@ -244,10 +228,30 @@ class FormContDoc(forms.ModelForm):
         model = ContDocumentos
         exclude = ()
         #fields=['id_infra','id_cynr','titulo','contenido']
+        
+class BaseContDocFormset(BaseInlineFormSet):
+    def add_fields(self, form, index):
+        super(BaseContDocFormset, self).add_fields(form, index)
+
+        # save the formset in the 'nested' property
+        form.nested = ContImgContFormSet(
+                        instance=form.instance,
+                        data=form.data if form.is_bound else None,
+                        files=form.files if form.is_bound else None,
+                        prefix='imagen-%s-%s' % (
+                            form.prefix,
+                            ContImgContFormSet.get_default_prefix()),
+                        #extra=1)
+                        )
+
 DocContDocFormSet = inlineformset_factory(
-    Documentos, ContDocumentos, form=FormContDoc, 
+    Documentos, ContDocumentos, form=FormContDoc, formset=BaseContDocFormset, 
     fields=['id_infra','id_cynr','titulo','contenido'], extra=1, can_delete=True
-    )
+    ) 
+
+
+
+
 
 #-----------------------------------------------------------------------------
 # CREAR Y EDITAR NOTICIAS.

@@ -115,24 +115,6 @@ crossorigin=""></script>
             </div><!-- ======= Fin Tabla CRUD ======= -->
           </div>
         </div>
-        <!-- ======= Paginacion ======= -->
-        <div class="row">
-          <div class="col-sm-12">
-            <div >Mostrando <b>{{object_list.count}}</b> de <b>{{total_registros}}</b> Registros</div>
-            <ul class="pagination">
-                {% if page_obj.has_previous %}
-                <li class="page-item"><a href="?page=1" class="page-link">primera</a></li>
-                <li class="page-item"><a href="?page={{ page_obj.previous_page_number }}" class="page-link">&laquo;</a></li>
-                {% endif %}
-                <li class="page-item active"><a href="?page={{ page_obj.number }}" class="page-link">{{ page_obj.number }}</a></li> 
-                {% if page_obj.has_next %}
-                <li class="page-item"> <a href="?page={{ page_obj.next_page_number }}" class="page-link">&raquo;</a></li>
-                  <li class="page-item"> <a href="?page={{ page_obj.paginator.num_pages }}" class="page-link">última</a></li>
-                {% endif %}
-            </ul>
-            <div class="hint-text">Página <b>{{ page_obj.number }}</b> de <b>{{ page_obj.paginator.num_pages }}</b></div>              
-          </div>
-        </div>
             <!-- Modal HTML -->
             <div id="crearItemModal" class="modal fade"></div>
     </div><!-- ======= Fin contenedor ======= -->

@@ -1,4 +1,4 @@
-<div class="modal-dialog modal-lg">
+<div class="modal-dialog modal-xl">
 <div class="modal-content">
       <div class="modal-header">
         {% if obj %}
@@ -9,12 +9,17 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
       </div>
       <div class="modal-body">
+
+      <!-- Bloque con el mapa de geometria para insertar mapa y campo no provisto en el formulario de django --> 
+      {% block mapa_geom %} {% endblock %}
+
         {% if obj %}
-          <form method="post" action='{% url contenido.url_editar obj.pk %}' class="php-email-form" {% block enctype_edit %}{% endblock %}>
+          <form id="form-container" method="post" action='{% url contenido.url_editar obj.pk %}' class="php-email-form" {% block funcion_edit %} {% endblock %} {% block enctype_edit %}{% endblock %}>
         {% else %}
-          <form method="post" action='{% url contenido.url_crear %}' class="php-email-form"  {% block enctype_create %}{% endblock %}>
+          <form id="form-container" method="post" action='{% url contenido.url_crear %}' class="php-email-form" {% block funcion_create %} {% endblock %} {% block enctype_create %}{% endblock %}>
         {% endif %}  
           {% csrf_token %}
+          <h4>Infraestructura</h4>
             {% for field in form %}     
               <div class="form-group">
                 <div class="col-md-12"><label class="control-label" for="{{ field.id_for_label }}"><dt>{{ field.label }}</dt></label></div>
@@ -26,12 +31,27 @@
                 {% endfor %}
               </div>
             {% endfor %}
+            <!-- Bloque con el campo de geometria no provisto en el formulario de django --> 
+            {% block campo_geom %} {% endblock %}
+
+            <!-- Este es el manejador del inline --> 
+            {{ hijos.management_form }}
+            {% for form in hijos.forms %}
+            <h4>Obra de Toma</h4>
+                {% for field in form.visible_fields %}     
+                  <div class="form-group">
+                    <div class="col-md-12"><label class="control-label" for="{{ field.id_for_label }}"><dt>{{ field.label }}</dt></label></div>
+                    <div class="col-md-12">{{field}}</div>
+                  </div>
+                {% endfor %}
+            {% endfor %}
             {% if obj %}
               <button type="submit" class="submit-btn btn btn-primary">Actualizar</button>
             {% else %}
               <button type="submit" class="submit-btn btn btn-primary">Crear</button>
             {% endif %}
         </form>
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

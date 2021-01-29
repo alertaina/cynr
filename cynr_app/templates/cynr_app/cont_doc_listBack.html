@@ -1,56 +1,14 @@
 
 {% extends "cynr_app/base_paginas.html" %}
 {% load static %}
-{% block head %}
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
-   crossorigin=""/>
-<!-- Make sure you put this AFTER Leaflet's CSS -->
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-crossorigin=""></script>
-<!-- Geoman. Editor para graficar en leaflet -->
-<link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css" />
-<script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.min.js"></script>
 
-{% endblock head %}
 
 {% block header %}
 <header id="header" class="fixed-top">
   <div class="container">
-
     <div class="logo float-left">
-    
-      <h1 class="text-light"><a href="{% url 'cynr_app:index' %}"><span>CyNR</span></a></h1>
-      <!-- Uncomment below if you prefer to use an image logo -->
-      <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+      <h1 class="text-light"><a href="{% url 'cynr_app:documentos_crud' %}"><i class="far fa-arrow-alt-circle-left"></i><span>Documentos</span></a></h1>
     </div>
-
-    <nav class="nav-menu float-right d-none d-lg-block">
-          <ul>
-            {% for key, value in menu_navegacion.items %}
-             {% if value.menu %}
-             <li class="drop-down"><a href="">{{ key }}</a> 
-              <ul>
-                {% for clave, valor in value.menu.items %}
-                <li><a href={{ valor }}>{{ clave }}</a></li>
-                {% endfor %}
-              </ul>
-              </li>
-             {% else %}
-             <li> <a href= {{ value }}>{{ key }}</a></li>
-             {% endif %}
-            {% endfor %}
-            {% if user.is_authenticated %}
-            <li><a href="{% url 'logout' %}" title="Salir de la Sesión"><i class="fa fa-power-off" style='color: white;'></i>&nbsp;Salir de Sesión</a></li>
-            <li><a><i class="fa fa-user" style='color: white;'></i> &nbsp;{{ user.username }}</a></li>
-            {% else %}
-            <li><a href="{% url 'login' %}" title="Iniciar Sesión"><i class="fa fa-power-off" style='color: white;'></i> &nbsp;Iniciar Sesión</a></li>
-            <li><a><i class="fa fa-user" style='color: white;'></i></a></li>
-            {% endif %}    
-          </ul>
-
-    </nav><!-- .nav-menu -->
   </div>
 </header><!-- End Header -->
 {% endblock header %}
@@ -76,7 +34,7 @@ crossorigin=""></script>
       <!-- ======= Boton para crear y Barra de Búsqueda ======= -->
       <div class="row">
         <div class="col-sm-2">
-          <button class="crud-button" onclick="return abrir_modal('{% url contenido.url_crear %}')" >
+          <!--<button class="crud-button" onclick="return abrir_modal('{% url contenido.url_crear %}')" >-->
             <i class="fas fa-plus-circle"></i> <span>Agregar</span></button>			
         </div>
         <div class="col-sm-10">
@@ -104,9 +62,9 @@ crossorigin=""></script>
                     {% endif %} 
                     {% endfor %}
                     <td>
-                    <a href="" class="edit" data-toggle="modal"><i class="far fa-eye" data-toggle="tooltip" title="Ver" style=" color: black;">&#xE254;</i></a> 
+                    <!--<a href="" class="edit" data-toggle="modal"><i class="far fa-eye" data-toggle="tooltip" title="Ver" style=" color: black;">&#xE254;</i></a> 
                     <a href="#" onclick="return abrir_modal('{% url contenido.url_editar registro.id %}')" class="edit" data-toggle="modal"><i class="far fa-edit" data-toggle="tooltip" title="Editar" style=" color: green;">&#xE254;</i></a>
-                    <a href="" class="delete" data-toggle="modal"><i class="far fa-trash-alt" data-toggle="tooltip" title="Borrar"  style=" color: red;">&#xE872;</i></a>
+                    <a href="" class="delete" data-toggle="modal"><i class="far fa-trash-alt" data-toggle="tooltip" title="Borrar"  style=" color: red;">&#xE872;</i></a>-->
                     </td>
                   </tr>
                   {% endfor %}               

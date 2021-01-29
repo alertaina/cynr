@@ -12,8 +12,10 @@ admin.site.register(Infraestructura)
 admin.site.register(CyNR)
 admin.site.register(ObrasToma)
 admin.site.register(Documentos)
+admin.site.register(ContDocumentos)
 admin.site.register(Archivos)
 admin.site.register(Noticias)
+admin.site.register(Carrusel)
 
 #@admin.register(Categorias)
 #class CategoriasAdmin(admin.ModelAdmin):

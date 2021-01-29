@@ -120,15 +120,18 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-
+MEDIA_URL =  '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # REGISTRACION Y AUTENTICACION
 LOGIN_REDIRECT_URL = 'cynr_app:index'
 LOGIN_URL = '/accounts/login/'
 LOGOUT_REDIRECT_URL	= 'cynr_app:index'
+# ES NECESARIO CONFIGURAR LA LIBRERIA DE GDAL A USAR
+GDAL_LIBRARY_PATH = "C:\\Python38\\Lib\\site-packages\\osgeo\\gdal301"

@@ -9,7 +9,7 @@ from .models import *
 querysetPagInst= Instituciones.objects.all().order_by('nombre').values('autor__username','id','nombre','categoria','alc_geografico')
 contextoPagInst ={
                     'titulo': 'Instituciones',
-                    'encabezados':['Autor','Nombre','Categoria','Jurisdicción'],
+                    'encabezados':['Autor','Nombre','Categoria','Alcance Geográfico'],
                     'url_crear':'cynr_app:instituciones_crud_crear',
                     'url_editar':'cynr_app:instituciones_crud_editar',
                     'url_eliminar':'cynr_app:instituciones_crud_eliminar'
@@ -46,9 +46,9 @@ querysetObraToma= ObrasToma.objects.all().order_by('id_infra__nombre').values('a
 contextoObraToma ={
                     'titulo': 'Obras de Toma',
                     'encabezados':['Autor','Nombre','Estado'],
-                    'url_crear':'cynr_app:obra_de_toma_crud_crear',
-                    'url_editar':'cynr_app:obra_de_toma_crud_editar',
-                    'url_eliminar':'cynr_app:obra_de_toma_crud_eliminar'
+                    'url_crear':'cynr_app:obras_de_toma_crud_crear',
+                    'url_editar':'cynr_app:obras_de_toma_crud_editar',
+                    'url_eliminar':'cynr_app:obras_de_toma_crud_eliminar'
                  }   
 # --------------------------------------------------------------------------------------------------
 
@@ -64,7 +64,7 @@ contextoCyNR ={
                  }   
 # --------------------------------------------------------------------------------------------------
 
-# PÁGINA DOCUEMNTOS -----------------------------------------------------------------------------
+# PÁGINA DOCUMENTOS -----------------------------------------------------------------------------
 # Datos para la Tabla
 querysetDoc= Documentos.objects.all().order_by('fecha_hora').values('autor__username','id','fecha_hora','categoria','titulo','descripcion')
 contextoDoc ={
@@ -72,7 +72,8 @@ contextoDoc ={
                     'encabezados':['Autor','Fecha','Categoria','Titulo','Descripción'],
                     'url_crear':'cynr_app:documentos_crud_crear',
                     'url_editar':'cynr_app:documentos_crud_editar',
-                    'url_eliminar':'cynr_app:documentos_crud_eliminar'
+                    'url_eliminar':'cynr_app:documentos_crud_eliminar',
+                    'url_cont':'cynr_app:cont_documento_crud'
                  }   
 # --------------------------------------------------------------------------------------------------
 

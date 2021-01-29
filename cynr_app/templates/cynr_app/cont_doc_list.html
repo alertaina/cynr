@@ -1,0 +1,21 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <title>Hola HTML</title>
+  </head>
+  <body>
+    <p>Hola Mundo!</p>
+    {% for registro in contenido %}
+    {% for key,value in registro.items %}
+    {% if key != "id" %}
+    <td>{{key}}</td>
+    <td>{{value}}</td>
+    {% endif %}
+    {% endfor %} 
+    {% endfor %}
+  </body>
+</html>
+
+

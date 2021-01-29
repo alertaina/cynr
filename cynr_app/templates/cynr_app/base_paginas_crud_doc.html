@@ -2,19 +2,8 @@
 {% extends "cynr_app/base_paginas.html" %}
 {% load static %}
 {% block head %}
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
-   crossorigin=""/>
-<!-- Make sure you put this AFTER Leaflet's CSS -->
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-crossorigin=""></script>
-<!-- Geoman. Editor para graficar en leaflet -->
-<link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css" />
-<script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.min.js"></script>
-
+<link href="{% static 'cynr_app/css/cynr_app.css' %}" rel="stylesheet">
 {% endblock head %}
-
 {% block header %}
 <header id="header" class="fixed-top">
   <div class="container">
@@ -85,34 +74,42 @@ crossorigin=""></script>
       </div>
       <!-- ======= Tabla CRUD ======= -->
       <div class="row">
-        <div class="col-sm-12">
-            <div class="table-responsive">
-              <table class="table table-striped table-hover">
+        <div class="col">
+          <div style="overflow-x:auto;">
+            <table>
               <thead>
-                <tr>
-                  {% for encabezado in contenido.encabezados %}
-                    <th>{{encabezado}}</th>
-                  {% endfor %}
-                </tr>
-              </thead>
-              <tbody id="myTable">
-                  {% for registro in object_list %}
-                  <tr>
-                    {% for key,value in registro.items %}
-                    {% if key != "id" %}
-                    <td>{{value}}</td>
-                    {% endif %} 
-                    {% endfor %}
-                    <td>
-                    <a href="" class="edit" data-toggle="modal"><i class="far fa-eye" data-toggle="tooltip" title="Ver" style=" color: black;">&#xE254;</i></a> 
-                    <a href="#" onclick="return abrir_modal('{% url contenido.url_editar registro.id %}')" class="edit" data-toggle="modal"><i class="far fa-edit" data-toggle="tooltip" title="Editar" style=" color: green;">&#xE254;</i></a>
-                    <a href="" class="delete" data-toggle="modal"><i class="far fa-trash-alt" data-toggle="tooltip" title="Borrar"  style=" color: red;">&#xE872;</i></a>
-                    </td>
-                  </tr>
-                  {% endfor %}               
-              </tbody>
+              <tr>
+                {% for encabezado in contenido.encabezados %}
+                <th>{{encabezado}}</th>
+                {% endfor %}
+                <th>Ver</th>
+                <th>Editar</th>
+                <th>Contenido</th>
+              </tr>
+            </thead>
+            <tbody id="myTable">
+              {% for registro in object_list %}
+              <tr>
+                {% for key,value in registro.items %}
+                {% if key != "id" %}
+                <td>{{value}}</td>
+                {% endif %} 
+                {% endfor %}
+                <td>
+                  <button type="button" class="btn"><i class="far fa-eye"></i> </button>
+                <!--<a href="" class="edit" data-toggle="modal"><i class="far fa-eye" data-toggle="tooltip" title="Ver" style=" color: black;">&#xE254;</i></a>-->
+                </td>
+                <td>
+                  <a href="#" onclick="return abrir_modal('{% url contenido.url_editar registro.id %}')" class="edit" data-toggle="modal"><i class="far fa-edit" style=" color: green;"></i></a>
+                </td>
+                <td>
+                  <a href="{% url contenido.url_cont registro.id %}"><i class="far fa-file-alt" style=" color: green"></i></a>
+                </td> 
+              </tr>
+              {% endfor %}               
+            </tbody>
             </table>
-            </div><!-- ======= Fin Tabla CRUD ======= -->
+          </div>
           </div>
         </div>
         <!-- ======= Paginacion ======= -->
