@@ -50,11 +50,11 @@ class PaginasInicioTemplateView(generic.TemplateView):
 #########################################################################
 # CLASE BASE PARA TODAS LOS FURMULARIOS DE CREACIÓN DE ITEMS
 #########################################################################
-class BaseCreateView(LoginRequiredMixin, CreateView):
+class BaseCreateView(CreateView):
 
     def form_valid(self, form):
         f = form.save(commit=False)
-        f.autor = self.request.user
+        f.autor_id = self.request.user
         f.save()
         return super().form_valid(form)
 
@@ -65,7 +65,7 @@ class BaseUpdateView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         f = form.save(commit=False)
-        f.autor = self.request.user
+        f.autor_id = self.request.user
         f.save()
         return super().form_valid(form)
 ##########################################################################
@@ -97,26 +97,26 @@ class BaseObraTomaCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         context = self.get_context_data()
         hijos = context['hijos']
-        form.instance.autor = self.request.user
+        form.instance.autor_id = self.request.user
         form.instance.ficha_tec = self.request.FILES["ficha_tec"]
         form.instance.geom = self.request.POST["geom"]
         self.object = form.save()
         if hijos.is_valid():           
             hijos.instance = self.object
-            hijos.instance.autor = self.request.user
+            hijos.instance.autor_id = self.request.user
             hijos.save()
         return super(BaseObraTomaCreateView, self).form_valid(form) 
 
 #########################################################################
 # CLASE PARA LA CREACIÓN DE INSTITUCIONES
 #########################################################################
-class InstitucionesCreateView(LoginRequiredMixin, CreateView):
-    def form_valid(self, form):
-        f = form.save(commit=False)
-        f.autor = self.request.user
-        f.logo = self.request.FILES["logo"]
-        f.save()
-        return super().form_valid(form)
+#class InstitucionesCreateView(LoginRequiredMixin, CreateView):
+#    def form_valid(self, form):
+#        f = form.save(commit=False)
+#        f.autor_id = self.request.user
+#        #f.logo = self.request.FILES["logo"]
+#        f.save()
+#        return super().form_valid(form)
 #########################################################################
 # CLASE PARA LA CREACIÓN DE INFRAESTRUCTURA
 #########################################################################
@@ -124,7 +124,7 @@ class BaseInfraestructuraCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         f = form.save(commit=False)
-        f.autor = self.request.user
+        f.autor_id = self.request.user
         f.geom = self.request.POST["geom"]
         f.save()
         return super().form_valid(form)
@@ -136,7 +136,7 @@ class BaseInfraestructuraUpdateView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         f = form.save(commit=False)
-        f.autor = self.request.user
+        f.autor_id = self.request.user
         f.geom = self.request.POST["geom"]
         f.save()
         return super().form_valid(form)

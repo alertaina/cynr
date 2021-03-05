@@ -329,7 +329,8 @@ h1, h2, h3, h4, h5, h6, .font-primary {
   top: 0;
   width: 130%;
   height: 95%;
-  background: linear-gradient(to right, rgba(30, 67, 86, 0.8), rgba(30, 67, 86, 0.6)), url("../img/WP_20161207_17_52_48_Pro.jpg") center top no-repeat;
+  background: linear-gradient(to right, rgba(30, 67, 86, 0.8), rgba(30, 67, 86, 0.6)), url("../img/Portada1.jpg") center top no-repeat;
+  background-size: cover;
   z-index: 0;
   border-radius: 0 0 50% 50%;
   transform: translateX(-50%) rotate(0deg);
@@ -2355,7 +2356,7 @@ section {
 }
 
 /*--------------------------------------------------------------
-# AGREGADAS PARA ESTA APLICACION CYNR
+# AGREGADAS PARA ESTA APLICACION 1
 --------------------------------------------------------------*/
 /*--------------------------------------------------------------
 # crud

@@ -9,7 +9,7 @@ admin.site.register(Instituciones)
 admin.site.register(DocInstitucionales)
 admin.site.register(Contactos)
 admin.site.register(Infraestructura)
-admin.site.register(CyNR)
+#admin.site.register(Cynr)
 admin.site.register(ObrasToma)
 admin.site.register(Documentos)
 admin.site.register(ContDocumentos)
@@ -19,13 +19,13 @@ admin.site.register(Carrusel)
 
 #@admin.register(Categorias)
 #class CategoriasAdmin(admin.ModelAdmin):
-    #list_display = ('autor','id_grupo','categoria')
+    #list_display = ('autor_id','id_grupo','categoria')
 #    list_select_related = ('id_grupo')
 
 #@admin.register(Categorias)
 #class CategoriasAdmin(admin.ModelAdmin):
 #    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-#        if db_field.name == "autor":
+#        if db_field.name == "autor_id":
 
 #       if db_field.name == "id_grupo":
 #            kwargs["queryset"] = GruposCategorias.objects.values_list('grupo')

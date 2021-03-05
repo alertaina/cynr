@@ -1755,7 +1755,7 @@
 })(window.Zepto || window.jQuery, window, document);
 
 /**
- * AutoRefresh Plugin
+ * autor_idefresh Plugin
  * @version 2.3.4
  * @author Artus Kolanowski
  * @author David Deutsch
@@ -1768,7 +1768,7 @@
 	 * @class The Auto Refresh Plugin
 	 * @param {Owl} carousel - The Owl Carousel
 	 */
-	var AutoRefresh = function(carousel) {
+	var autor_idefresh = function(carousel) {
 		/**
 		 * Reference to the core.
 		 * @protected
@@ -1797,14 +1797,14 @@
 		 */
 		this._handlers = {
 			'initialized.owl.carousel': $.proxy(function(e) {
-				if (e.namespace && this._core.settings.autoRefresh) {
+				if (e.namespace && this._core.settings.autor_idefresh) {
 					this.watch();
 				}
 			}, this)
 		};
 
 		// set default options
-		this._core.options = $.extend({}, AutoRefresh.Defaults, this._core.options);
+		this._core.options = $.extend({}, autor_idefresh.Defaults, this._core.options);
 
 		// register event handlers
 		this._core.$element.on(this._handlers);
@@ -1814,27 +1814,27 @@
 	 * Default options.
 	 * @public
 	 */
-	AutoRefresh.Defaults = {
-		autoRefresh: true,
-		autoRefreshInterval: 500
+	autor_idefresh.Defaults = {
+		autor_idefresh: true,
+		autor_idefreshInterval: 500
 	};
 
 	/**
 	 * Watches the element.
 	 */
-	AutoRefresh.prototype.watch = function() {
+	autor_idefresh.prototype.watch = function() {
 		if (this._interval) {
 			return;
 		}
 
 		this._visible = this._core.isVisible();
-		this._interval = window.setInterval($.proxy(this.refresh, this), this._core.settings.autoRefreshInterval);
+		this._interval = window.setInterval($.proxy(this.refresh, this), this._core.settings.autor_idefreshInterval);
 	};
 
 	/**
 	 * Refreshes the element.
 	 */
-	AutoRefresh.prototype.refresh = function() {
+	autor_idefresh.prototype.refresh = function() {
 		if (this._core.isVisible() === this._visible) {
 			return;
 		}
@@ -1849,7 +1849,7 @@
 	/**
 	 * Destroys the plugin.
 	 */
-	AutoRefresh.prototype.destroy = function() {
+	autor_idefresh.prototype.destroy = function() {
 		var handler, property;
 
 		window.clearInterval(this._interval);
@@ -1862,7 +1862,7 @@
 		}
 	};
 
-	$.fn.owlCarousel.Constructor.Plugins.AutoRefresh = AutoRefresh;
+	$.fn.owlCarousel.Constructor.Plugins.autor_idefresh = autor_idefresh;
 
 })(window.Zepto || window.jQuery, window, document);
 
@@ -2080,7 +2080,7 @@
 			}
 		});
 
-		// Autoresize the height of the carousel when window is resized
+		// autor_idesize the height of the carousel when window is resized
 		// When carousel has images, the height is dependent on the width
 		// and should also change on resize
 		$(window).resize(function() {

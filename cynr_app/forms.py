@@ -159,7 +159,7 @@ ObraTomaFormset = inlineformset_factory(
 #-----------------------------------------------------------------------------
 class FormCyNR(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        super(FormCyNR, self).__init__(*args, **kwargs)
+        super(Form1, self).__init__(*args, **kwargs)
         self.fields['unid_meteo_est'].widget.attrs.update({'class': 'form-control'})
         self.fields['referencia'].widget.attrs.update({'class': 'form-control'})
         self.fields['valor'].widget.attrs.update({'class': 'form-control'})

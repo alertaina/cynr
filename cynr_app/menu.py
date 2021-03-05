@@ -29,12 +29,12 @@
 #                   'Instituciones': {'menu': dict_inst},
 #                   'Documentos':'/cynr_app/documentos_crud',
 #                   'Noticias': '/cynr_app/noticias_crud',
-#                   'CyNR':'/cynr_app/cynr_crud',
+#                   1:'/cynr_app/1_crud',
 #                  }
 MENU_NAVEGACION = {
                    'Infraestructura': {'menu': {'Obras de Toma':'/cynr_app/obras_de_toma_crud'}},
                    'Instituciones': {'menu': {'Instituciones':'/cynr_app/instituciones_crud',
-                                             'Documentos':'/cynr_app/instituciones_crud'}},
+                                             'Documentos':'/cynr_app/doc_instituciones_crud'}},
                    'Capas GeoJson': {'menu': {'Capas':'/cynr_app/capas_geojson_crud',
                                               'Geoman.io':'/cynr_app/geomanio'}},
                    'Documentos':'/cynr_app/documentos_crud',

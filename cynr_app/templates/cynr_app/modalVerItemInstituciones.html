@@ -1,0 +1,32 @@
+<div class="modal-dialog modal-lg">
+<div class="modal-content">
+      <div class="modal-header">
+          <h2>{{obj.nombre}}</h2>
+
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      </div>
+						
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-5 pt-4">
+            <img src="/cynr_app{{obj.logo.url}}" class="img-fluid" alt="">
+          </div>
+          <div class="col-md-7 pt-4">
+            <ul class="list-unstyled">
+              <li> <b>Categoría:</b> {{obj.categoria}}</li>
+              <li><b>Web:</b><a href="{{obj.pag_web}}"> {{obj.pag_web}}</a></li>
+              <li><b>Dirección:</b> {{obj.direccion}}</li>
+              <li><b>Teléfono:</b> {{obj.tel}}</li>
+              <li> <b>Alcance:</b> {{obj.alc_geografico}}</li>
+            </ul>
+          </div>
+        </div>
+        <div class="row">
+          <p>{{obj.presentacion}}</p>
+        </div>			
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
+</div>
+</div>

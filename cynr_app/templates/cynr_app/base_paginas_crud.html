@@ -21,7 +21,7 @@ crossorigin=""></script>
 
     <div class="logo float-left">
     
-      <h1 class="text-light"><a href="{% url 'cynr_app:index' %}"><span>CyNR</span></a></h1>
+      <h1 class="text-light"><a href="{% url 'cynr_app:index' %}"><span>CYNR</span></a></h1>
       <!-- Uncomment below if you prefer to use an image logo -->
       <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
     </div>
@@ -93,6 +93,9 @@ crossorigin=""></script>
                   {% for encabezado in contenido.encabezados %}
                     <th>{{encabezado}}</th>
                   {% endfor %}
+                  <th>Ver</th>
+                  <th>Editar</th>
+                  <th>Eliminar</th>
                 </tr>
               </thead>
               <tbody id="myTable">
@@ -104,9 +107,13 @@ crossorigin=""></script>
                     {% endif %} 
                     {% endfor %}
                     <td>
-                    <a href="" class="edit" data-toggle="modal"><i class="far fa-eye" data-toggle="tooltip" title="Ver" style=" color: black;">&#xE254;</i></a> 
-                    <a href="#" onclick="return abrir_modal('{% url contenido.url_editar registro.id %}')" class="edit" data-toggle="modal"><i class="far fa-edit" data-toggle="tooltip" title="Editar" style=" color: green;">&#xE254;</i></a>
-                    <a href="" class="delete" data-toggle="modal"><i class="far fa-trash-alt" data-toggle="tooltip" title="Borrar"  style=" color: red;">&#xE872;</i></a>
+                    <a href="#" onclick="return abrir_modal('{% url contenido.url_ver registro.id %}')" class="ver" data-toggle="modal"><i class="far fa-eye" style=" color: black;"></i></a>
+                    </td>
+                    <td>
+                      <a href="#" onclick="return abrir_modal('{% url contenido.url_editar registro.id %}')" class="editar" data-toggle="modal"><i class="far fa-edit" style=" color: green;"></i></a>
+                    </td>
+                    <td>
+                    <a href="#" onclick="return abrir_modal('{% url contenido.url_eliminar registro.id %}')" data-toggle="modal" class="borrar"><i class="far fa-trash-alt" style=" color: red;"></i></a>
                     </td>
                   </tr>
                   {% endfor %}               

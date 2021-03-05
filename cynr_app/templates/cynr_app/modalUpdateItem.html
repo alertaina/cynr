@@ -1,0 +1,35 @@
+<div class="modal-dialog modal-lg">
+<div class="modal-content">
+      <div class="modal-header">			
+          <h4 class="modal-title">Actualizar Registro</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      </div>
+      <div class="modal-body">
+        {% if user.username == obj.autor_id.username %}			
+          <form method="post" action='{% url contenido.url_editar obj.pk %}' class="php-email-form" {% block enctype %}{% endblock %}>
+          {% csrf_token %}
+            {% for field in form %}     
+              <div class="form-group">
+                <div class="col-md-12"><label class="control-label" for="{{ field.id_for_label }}"><dt>{{ field.label }}</dt></label></div>
+                <div class="col-md-12">{{field}}</div>
+              </div>
+              <div class="{% if field.errors %} invalid{% endif %}">
+                {% for error in field.errors %}
+                  <p class="help-block">{{ error }}</p>
+                {% endfor %}
+              </div>
+            {% endfor %}
+              <button type="submit" class="submit-btn btn btn-primary">Actualizar</button>
+          </form>
+        {% else %}
+        <div class="alert alert-info" role="alert">
+          <i class="fas fa-info-circle" style="font-size:24px"></i> Sólo el usuario <b>{{obj.autor_id.username}}</b> puede
+          actualizar este registro.
+        </div>
+        {% endif %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
+</div>
+</div>

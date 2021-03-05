@@ -1,5 +1,86 @@
+-- 0) SETEAMOS LA CODIFICACION DE LOS CLIENTES DE LA BASE COMO UTF8 PARA
+-- PODER CARGAR CARACTERES COMO ACENTOS.
+SET CLIENT_ENCODING TO 'UTF8';
+
 -- 1) PRIMERO SE REALIZA LA MIGRACIÓN DE DJANGO, PARA CREAR LAS
 -- TABLAS PARA EL MANEJO DE USUARIOS Y DEMÁS, PROPIAS DE DJANGO
+-- SE DEBE CREAR EL ADMINISTRADOR AL QUE LLAMAMOS 1
+
+-- 2) HACEMOS UNAS MODIFICACIONES QUE POR ALGÚN MOTIVO NO SE EFECTUAN DESDE DJANGO
+-- Se trata de la actualizacion de registros que se ralacionana mediante clave foranea
+-- con uno que se borra
+
+-- 3) CARGA DE GRUPOS DE CATEGORIAS
+INSERT INTO grupos_categorias (autor_id, grupo) VALUES (1, 'Instituciones'); --1
+INSERT INTO grupos_categorias (autor_id, grupo) VALUES (1, 'Tipo de Obra de Toma');--2
+INSERT INTO grupos_categorias (autor_id, grupo) VALUES (1, 'Funcionamiento de Obra de Toma');--3
+INSERT INTO grupos_categorias (autor_id, grupo) VALUES (1, 'Uso de Obra de Toma');--4
+INSERT INTO grupos_categorias (autor_id, grupo) VALUES (1, 'Estado de Obra de Toma');--5
+INSERT INTO grupos_categorias (autor_id, grupo) VALUES (1, 'Documentos');--6
+INSERT INTO grupos_categorias (autor_id, grupo) VALUES (1, 'Documentos Institucionales');--7
+INSERT INTO grupos_categorias (autor_id, grupo) VALUES (1, 'Infraestructura');--8
+INSERT INTO grupos_categorias (autor_id, grupo) VALUES (1, 'Audiovisuales');--9
+
+-- 4) CARGA DE CATEGORIAS
+    -- 1 - instituciones
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 1,'ESTADO NACIONAL');
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 1,'ESTADO PROVINCIAL');
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 1,'ESTADO MUNICIPAL');
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 1,'ONG');
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 1,'INSTITUCION PRIVADA');
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 1,'EMPRESA DE AGUA Y SANEAMIENTO');
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 1,'ESTADO PARTICULAR');
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 1,'PREFECTURA NAVAL ARGENTINA');
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 1,'PRENSA');
+    -- 2 - Tipo de obra de toma
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 2,'ESTACIÓN: BATERIA DE BOMBAS DE COTA FIJA');
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 2,'PONTON: BATERIA DE BOMBAS DE COTA VARIABLE');
+    -- 3 - Funcionamiento de Obra de Toma
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 3,'PERMANENTE');
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 3,'TRANSITORIA');
+    -- 4 - Uso de Obra de Toma  
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 4,'CONSUMO');
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 4,'INDUSTRIAL');
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 4,'RIEGO');
+    -- 5 - Estado de Obra de Toma
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 5,'FUNCIONAMIENTO PLENO');
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 5,'FUNCIONAMIENTO PARCIAL');
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 5,'INACTIVA');
+    -- 6 - Documentos
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 6,'OBSERVACIONES');
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 6,'ENTREVISTAS');
+    -- 7 - Documentos institucionales
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 7,'LEY NACIONAL');
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 7,'LEY PROVINCIAL');
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 7,'ORDENANZA MUNICIPAL');
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 7,'MARCO REGULTORIO'); 
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 7,'ACTA');
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 7,'RESOLUCIÓN');
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 7,'REGLAMENTO');
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 7,'ARTÍCULO PERIODÍSTICO');
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 7,'ARTÍCULO, DOCUMENTO');
+    -- 8 - Infraestructura
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 8,'OBRA DE TOMA');
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 8,'PUERTO');
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 8,'MUELLE');
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 8,'MUELLE GANADERO');
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 8,'LOCALIDAD');
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 8,'PLANTA POTABILIZADORA');
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 8,'SITIO');
+    -- 9 - Audiovisuales
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 9,'VIDEO');
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 9,'FOTOGRAFÍA');
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 9,'IMAGEN');
+INSERT INTO categorias (autor_id, id_grupo,categoria) VALUES (1, 9,'FIGURA');
+
+    -- 10 - Carrusel Pagina Principal
+INSERT INTO carrusel (encabezado,texto,leer_mas_link) VALUES ('COTAS Y NIVELES DE REFERENCIA','Cotas respecto del Cero IGN y Niveles Hidrométricos respecto de escalas locales; que indican alguna afectación a la comunidad en eventos en los cuales los cuerpos de agua superan las refrencias en condicienes de crecidas, o se encuentran por debajo de las mismas en condiciones de bajantes.','');
+INSERT INTO carrusel (encabezado,texto,leer_mas_link) VALUES ('Obras de Toma','Obras de Toma para la provisión de agua a plantas potabilizadoras para el servició de agua potable y otros usos.','');
+INSERT INTO carrusel (encabezado,texto,leer_mas_link) VALUES ('Localidades','Niveles de Alerta y Evacuación de localidades ribereñas.','');   
+INSERT INTO carrusel (encabezado,texto,leer_mas_link) VALUES ('Puertos y Vías Navegables','Niveles que afectan la operación de puertos y la navegación.','');
+
+-- 5) CARGA DE ALGUNOS REGISTROS QUE SIRVEN DE EJEMPLO PARA ARRANCAR, QUE TENDRAN COMO autor_id
+-- A 1
 
 -- 2) CREACION DE TABLAS DEL MODELO 
 --CREATE TABLE tabla_prueba (
@@ -7,64 +88,3 @@
 --    descripcion text,
 --    id_contacto INTEGER REFERENCES contactos on DELETE set null
 --);
-
--- 3) CARGA DE GRUPOS DE CATEGORIAS
-INSERT INTO grupos_categorias (autor, grupo) VALUES ('cynr', 'Instituciones'); --1
-INSERT INTO grupos_categorias (autor, grupo) VALUES ('cynr', 'Tipo de Obra de Toma');--2
-INSERT INTO grupos_categorias (autor, grupo) VALUES ('cynr', 'Funcionamiento de Obra de Toma');--3
-INSERT INTO grupos_categorias (autor, grupo) VALUES ('cynr', 'Uso de Obra de Toma');--4
-INSERT INTO grupos_categorias (autor, grupo) VALUES ('cynr', 'Estado de Obra de Toma');--5
-INSERT INTO grupos_categorias (autor, grupo) VALUES ('cynr', 'Documentos');--6
-INSERT INTO grupos_categorias (autor, grupo) VALUES ('cynr', 'Documentos Institucionales');--7
-INSERT INTO grupos_categorias (autor, grupo) VALUES ('cynr', 'Infraestructura');--8
-INSERT INTO grupos_categorias (autor, grupo) VALUES ('cynr', 'Audiovisuales');--9
-
--- 3) CARGA DE CATEGORIAS
-    -- 1 - instituciones
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 1,'ESTADO NACIONAL');
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 1,'ESTADO PROVINCIAL');
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 1,'ESTADO MUNICIPAL');
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 1,'ESTADO ONG');
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 1,'ESTADO INSTITUCION PRIVADA');
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 1,'ESTADO NACIONALEMPRESA DE AGUA Y SANEAMIENTO');
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 1,'ESTADO PARTICULAR');
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 1,'PREFECTURA NAVAL ARGENTINA');
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 1,'PRENSA');
-    -- 2 - Tipo de obra de toma
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 2,'ESTACIÓN: BATERIA DE BOMBAS DE COTA FIJA');
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 2,'PONTON: BATERIA DE BOMBAS DE COTA VARIABLE');
-    -- 3 - Funcionamiento de Obra de Toma
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 3,'PERMANENTE');
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 3,'TRANSITORIA');
-    -- 4 - Uso de Obra de Toma  
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 4,'CONSUMO');
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 4,'INDUSTRIAL');
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 4,'RIEGO');
-    -- 5 - Estado de Obra de Toma
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 5,'FUNCIONAMIENTO PLENO');
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 5,'FUNCIONAMIENTO PARCIAL');
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 5,'INACTIVA');
-    -- 6 - Documentos
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 6,'OBSERVACIONES');
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 6,'ENTREVISTAS');
-    -- 7 - Documentos institucionales
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 7,'LEY NACIONAL');
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 7,'LEY PROVINCIAL');
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 7,'ORDENANZA MUNICIPAL');
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 7,'MARCO REGULTORIO'); 
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 7,'ACTA');
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 7,'RESOLUCIÓN');
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 7,'REGLAMENTO');
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 7,'ARTÍCULO PERIODÍSTICO');
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 7,'ARTICULO, DOCUMENTO');
-    -- 8 - Infraestructura
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 8,'OBRA DE TOMA');
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 8,'PUERTO');
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 8,'MUELLE');
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 8,'MUELLE GANADERO');
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 8,'LOCALIDAD');
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 8,'PLANTA POTABILIZADORA');
-    -- 9 - Audiovisuales
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 9,'VIDEO');
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 9,'FOTOGRAFÍA');
-INSERT INTO categorias (autor, id_grupo,categoria) VALUES ('cynr', 9,'FIGURA');
