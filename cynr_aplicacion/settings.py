@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-from decouple import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -21,12 +20,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = '$m_k+k34ezas=rh4xs_8leum@c-0_qzkq$0+#17l%3!(f80042'
-SECRET_KEY = config('SECRET_KEY', default='$m_k+k34ezas=rh4xs_8leum@c-0_qzkq$0+#17l%3!(f80042')
+SECRET_KEY = '$m_k+k34ezas=rh4xs_8leum@c-0_qzkq$0+#17l%3!(f80042'
 #SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = True
-DEBUG = config('DEBUG', default=True)
+DEBUG = True
 #DEBUG = os.environ['DEBUG']
 
 ALLOWED_HOSTS = ['0.0.0.0','localhost']
@@ -84,19 +81,23 @@ WSGI_APPLICATION = 'cynr_aplicacion.wsgi.application'
 DATABASES = {
     'default': {
          'ENGINE': 'django.contrib.gis.db.backends.postgis',
-         'NAME':config('DBNAME'),
-         'USER':config('DBUSER'),
-         'PASSWORD':config('DBPASSWORD'),}
+         'NAME':'cynr',
+         'USER':'cynr',
+        'PASSWORD':'navidad',}
     #'default': {
     #    'ENGINE': 'django.contrib.gis.db.backends.postgis',
     #    'NAME': os.environ['POSTGRES_DB'],
     #    'USER': os.environ['POSTGRES_USER'],
-    #   'PASSWORD': os.environ['POSTGRES_PASSWORD'],
+    #    'PASSWORD': os.environ['POSTGRES_PASSWORD'],
     #    'HOST': os.environ['POSTGRES_HOST'],
     #    'PORT': os.environ['POSTGRES_PORT'],
-    #           }
+    #          }
 }
 
+# Superusuario
+#DJANGO_SUPERUSER_USERNAME=os.environ['DJANGO_SUPERUSER_USERNAME']
+#DJANGO_SUPERUSER_EMAIL=os.environ['DJANGO_SUPERUSER_EMAIL']
+#DJANGO_SUPERUSER_PASSWORD=os.environ['DJANGO_SUPERUSER_PASSWORD']
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators

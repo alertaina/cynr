@@ -1,2 +1,7 @@
 DEBUG=True
 SECRET_KEY=$m_k+k34ezas=rh4xs_8leum@c-0_qzkq$0+#17l%3!(f80042
+
+# Superusuario django
+DJANGO_SUPERUSER_USERNAME=cynr
+DJANGO_SUPERUSER_EMAIL=cynr@gmail.com
+DJANGO_SUPERUSER_PASSWORD=cynrpassword

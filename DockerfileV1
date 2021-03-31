@@ -1,0 +1,9 @@
+FROM ubuntu:focal
+ENV PYTHONUNBUFFERED 1
+RUN apt update -y
+RUN apt install python3.8
+RUN apt install python3-pip
+RUN apt install python3-psycopg2
+RUN apt-get install gdal-bin -y
+## Configurar la locacion geografica:
+# Geografic Area: 2; city or region: 6(arg:buenos aires); time zone:6(arg:buenos aires)

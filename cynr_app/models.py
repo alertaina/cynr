@@ -69,10 +69,10 @@ class DocInstitucionales(models.Model):
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=250,default=None,blank=False,verbose_name='Nombre')
     presentacion = models.TextField(default=None,blank=True,verbose_name='Presentación')
-    id_inst = models.ForeignKey(Instituciones,default=None, related_name='idDocInstitucion',null=True,on_delete=models.SET_NULL,db_column='id_inst') # Generador del documento
+    id_inst = models.ForeignKey(Instituciones,default=None, related_name='idDocInstitucion',null=True,blank=True,on_delete=models.SET_NULL,db_column='id_inst',verbose_name='Institución') # Generador del documento
     categoria = models.CharField(max_length=250,default=None,blank=False,verbose_name='Categoria')
     link_doc = models.URLField(max_length = 250,blank=True,verbose_name='Link Documento')
-    arch_doc = models.FileField(upload_to='cynr_app/doc_instituciones', max_length=250, blank=True, verbose_name='Archivo')
+    arch_doc = models.FileField(upload_to='doc_instituciones/', max_length=250, blank=True, verbose_name='Archivo')
     alc_geografico = models.CharField(max_length=250,default=None,blank=False,verbose_name='Alcance Geográfico')
 
     def __str__(self):
@@ -126,7 +126,7 @@ class Infraestructura(models.Model):
     geom = models.GeometryCollectionField(null=True,verbose_name='Georreferenciación',srid=4326)
     id_inst = models.ForeignKey(Instituciones,related_name='idInfInstitucion',null=True,on_delete=models.SET_NULL,blank=True,db_column='id_inst')
     # file will be uploaded to MEDIA_ROOT / uploads 
-    ficha_tec = models.FileField(upload_to ='cynr_app/fichas_tecnicas/',blank=True)
+    ficha_tec = models.FileField(upload_to ='fichas_tecnicas/',blank=True,verbose_name='Ficha Técnica')
     atributos =  models.JSONField(null=True,blank=True) # permite cargar atributos en formato json
     def __str__(self):
         return self.nombre

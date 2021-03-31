@@ -22,8 +22,9 @@ contextoPagInst ={
 #querysetPagDocInst= DocInstitucionales.objects.all().values('autor_id__username','id','nombre','presentacion','categoria','alc_geografico')
 contextoDocPagInst ={
                     'titulo': 'Documentos Institucionales',
-                    'encabezados':['Autor','Nombre','Presentación','Categoría','Jurisdicción'],
+                    'encabezados':['Autor','Nombre','Institución','Categoría','Jurisdicción'],
                     'url_crear':'cynr_app:doc_instituciones_crud_crear',
+                    'url_ver':'cynr_app:doc_instituciones_crud_ver',
                     'url_editar':'cynr_app:doc_instituciones_crud_editar',
                     'url_eliminar':'cynr_app:doc_instituciones_crud_eliminar'
                  }   
@@ -36,6 +37,7 @@ contextoInfraestructura ={
                     'titulo': 'Infraestructura',
                     'encabezados':['autor_id','Categoría','Nombre','Descripción','Institución'],
                     'url_crear':'cynr_app:infraestructura_crud_crear',
+                    'url_ver':'cynr_app:infraestructura_crud_ver',
                     'url_editar':'cynr_app:infraestructura_crud_editar',
                     'url_eliminar':'cynr_app:infraestructura_crud_eliminar'
                  }   

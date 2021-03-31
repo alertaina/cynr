@@ -32,7 +32,8 @@
 #                   1:'/cynr_app/1_crud',
 #                  }
 MENU_NAVEGACION = {
-                   'Infraestructura': {'menu': {'Obras de Toma':'/cynr_app/obras_de_toma_crud'}},
+                   'Infraestructura': {'menu':{'Infraestructura':'/cynr_app/infraestructura_crud',
+                                                'Obras de Toma':'/cynr_app/obras_de_toma_crud'}},
                    'Instituciones': {'menu': {'Instituciones':'/cynr_app/instituciones_crud',
                                              'Documentos':'/cynr_app/doc_instituciones_crud'}},
                    'Capas GeoJson': {'menu': {'Capas':'/cynr_app/capas_geojson_crud',

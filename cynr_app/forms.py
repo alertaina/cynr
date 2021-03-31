@@ -73,7 +73,7 @@ class FormDocInstitucionales(forms.ModelForm):
             CHOICE_CATEGORIAS.append((choice[0],choice[0]))
         super(FormDocInstitucionales, self).__init__(*args, **kwargs)
         self.fields['nombre'].widget.attrs.update({'class': 'form-control'})
-        self.fields['id_inst'].widget.attrs.update({'class': 'form-control'})
+        self.fields['id_inst'].widget.attrs.update({'class': ' form-control seleccion-simple-select2'})
         self.fields['presentacion'].widget.attrs.update({'class': 'form-control','row':3})
         self.fields['categoria']=forms.CharField(label='Categoria', required=False, help_text='Seleccione la categoria',
         widget=forms.Select(attrs={'class':"form-control",'placeholder': 'Categoria','rows':1},choices=CHOICE_CATEGORIAS))
@@ -100,14 +100,14 @@ class FormInfraestructura(forms.ModelForm):
         self.fields['categoria']=forms.CharField(label='Categoria', required=False, help_text='Seleccione la categoria',
         widget=forms.Select(attrs={'class':"form-control",'placeholder': 'Categoria','rows':1},choices=CHOICE_CATEGORIAS))
         #self.fields['geom']=forms.GeometryField(srid='4326',widget=forms.Textarea)
-        #self.fields['geometria'].widget.attrs.update({'class': 'form-control-file'})
+        self.fields['atributos'].widget.attrs.update({'class': 'form-control'})
         
         #self.fields['geom'].widget.attrs.update({'template_name':'cynr_app/geomFormItem.html','class': 'form-control'})
         self.fields['ficha_tec'].widget.attrs.update({'class': 'form-control-file'})
         
     class Meta:
         model = Infraestructura
-        fields=['nombre','id_inst','descripcion','categoria','ficha_tec']
+        fields=['nombre','id_inst','descripcion','categoria','atributos','ficha_tec']
 
 #-----------------------------------------------------------------------------
 #  OBRA DE TOMA.

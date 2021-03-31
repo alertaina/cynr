@@ -120,7 +120,7 @@ class BaseObraTomaCreateView(LoginRequiredMixin, CreateView):
 #########################################################################
 # CLASE PARA LA CREACIÓN DE INFRAESTRUCTURA
 #########################################################################
-class BaseInfraestructuraCreateView(LoginRequiredMixin, CreateView):
+class BaseInfraestructuraCreateView(CreateView):
 
     def form_valid(self, form):
         f = form.save(commit=False)

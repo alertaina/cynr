@@ -12,6 +12,10 @@ crossorigin=""></script>
 <!-- Geoman. Editor para graficar en leaflet -->
 <link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css" />
 <script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.min.js"></script>
+<!-- Librerias Select2-->
+<link href="{% static 'cynr_app/css/select2.min.css' %}" rel="stylesheet" />
+<link href="{% static 'cynr_app/css/select2-bootstrap4.css' %}" rel="stylesheet">
+
 
 {% endblock head %}
 
@@ -103,7 +107,7 @@ crossorigin=""></script>
                   <tr>
                     {% for key,value in registro.items %}
                     {% if key != "id" %}
-                    <td>{{value}}</td>
+                        <td>{{value}}</td>
                     {% endif %} 
                     {% endfor %}
                     <td>
@@ -155,6 +159,8 @@ crossorigin=""></script>
               keyboard: false,
           });
           $(this).modal('show');
+          // inicializamos la funcion select2 para la clase seleccion-simple-select2 de los formularios
+          $('.seleccion-simple-select2').select2({theme: "bootstrap4"});
           });
           return false;
       }
@@ -163,8 +169,11 @@ crossorigin=""></script>
       $('#crearItemModal').modal('hide');
       return false;
       }
+
   </script>
   {% endblock main %}
   {% block scripts %}
     <script src="{% static 'cynr_app/js/main_cynr.js' %}"></script>
+    <!-- Librerias Select2-->
+    <script src="{% static 'cynr_app/js/select2.min.js' %}"></script>
   {% endblock scripts %}

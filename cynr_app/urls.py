@@ -77,18 +77,16 @@ urlpatterns = [
         template_name = 'cynr_app/modalDeleteItem.html',
                             ) , 
         name='instituciones_crud_eliminar'
-    ),
+        ),
     ####################################################################
     #- DOCUMENTOS INSTITUCIONES
     ####################################################################
     # CRUD DOC INSTITUCIONES
     path('doc_instituciones_crud/',ListView.as_view(
-        #queryset = contenidos.querysetPagDocInst,
-        queryset = DocInstitucionales.objects.all().values('autor_id__username','id','nombre','presentacion','categoria','alc_geografico'),
+        queryset = DocInstitucionales.objects.all().values('autor_id__username','id','nombre','id_inst__nombre','categoria','alc_geografico'),
         paginate_by = 4,
         extra_context={'menu_navegacion':menu.MENU_NAVEGACION,
                         'contenido': contenidos.contextoDocPagInst,
-                        #'total_registros': contenidos.querysetPagDocInst.count(),
                       },
         template_name = 'cynr_app/base_paginas_crud.html',
                                 ) , 
@@ -98,26 +96,44 @@ urlpatterns = [
         path('doc_instituciones_crud_crear',views.BaseCreateView.as_view(
         success_url = reverse_lazy('cynr_app:doc_instituciones_crud'),
         extra_context={'contenido': contenidos.contextoDocPagInst,
-                       #'total_registros': contenidos.querysetInfraestructura.count(),
                       },
         form_class = forms.FormDocInstitucionales,
-        template_name = 'cynr_app/modalFormItem.html',
+        template_name = 'cynr_app/modalCreateItemWithFile.html',
                                 ) , 
         name='doc_instituciones_crud_crear'
         ),
-
+    # VER DOC INSTITUCION
+        path('doc_instituciones_crud_ver/<int:pk>',DetailView.as_view(
+        model = DocInstitucionales,
+        context_object_name = 'obj',
+        template_name = 'cynr_app/modalVerItemInstituciones.html',
+                                ) , 
+        name='doc_instituciones_crud_ver'
+        ),
     # EDITAR DOC INSTITUCION
         path('doc_instituciones_crud_editar/<int:pk>', UpdateView.as_view(
-        model = Instituciones,
+        model = DocInstitucionales,
         context_object_name = 'obj',
         success_url = reverse_lazy('cynr_app:doc_instituciones_crud'),
         extra_context={'contenido': contenidos.contextoDocPagInst,
                       },
         form_class = forms.FormDocInstitucionales,
-        template_name = 'cynr_app/modalFormItem.html',
+        template_name = 'cynr_app/modalUpdateItemWithFile.html',
                                 ) , 
         name='doc_instituciones_crud_editar'
         ),
+        # ELIMINAR DOC INSTITUCION
+        path('doc_instituciones_crud_eliminar/<int:pk>', DeleteView.as_view(
+        model = DocInstitucionales,
+        context_object_name = 'obj',
+        success_url = reverse_lazy('cynr_app:doc_instituciones_crud'),
+        extra_context={'contenido': contenidos.contextoDocPagInst,
+                    },
+        template_name = 'cynr_app/modalDeleteItem.html',
+                            ) , 
+        name='doc_instituciones_crud_eliminar'
+        ),
+
     #----------------------------------------------------------------------
     # CRUD INFRAESTRUCTURA
     path('infraestructura_crud/',ListView.as_view(
@@ -138,9 +154,17 @@ urlpatterns = [
         extra_context={'contenido': contenidos.contextoInfraestructura,
                       },
         form_class = forms.FormInfraestructura,
-        template_name = 'cynr_app/modalFormItemGeo.html',
+        template_name = 'cynr_app/modalCreateItemGeoWithFile.html',
                                 ) , 
         name='infraestructura_crud_crear'
+        ),
+    # VER IFRAESTRUCTURA
+        path('infraestructura_crud_ver/<int:pk>',DetailView.as_view(
+        model = Infraestructura,
+        context_object_name = 'obj',
+        template_name = 'cynr_app/modalVerItemInstituciones.html',
+                                ) , 
+        name='infraestructura_crud_ver'
         ),
     # EDITAR INFRAESTRUCTURA
         path('infraestructura_crud_editar/<int:pk>', views.BaseInfraestructuraUpdateView.as_view(
@@ -153,6 +177,17 @@ urlpatterns = [
         template_name = 'cynr_app/modalFormItemGeo.html',
                                 ) , 
         name='infraestructura_crud_editar'
+        ),
+    # ELIMINAR INFRAESTRUCTURA
+        path('infraestructura_crud_eliminar/<int:pk>', DeleteView.as_view(
+        model = Infraestructura,
+        context_object_name = 'obj',
+        success_url = reverse_lazy('cynr_app:infraestructura_crud'),
+        extra_context={'contenido': contenidos.contextoInfraestructura,
+                    },
+        template_name = 'cynr_app/modalDeleteItem.html',
+                            ) , 
+        name='infraestructura_crud_eliminar'
         ),
     #----------------------------------------------------------------------
     # CRUD OBRA DE TOMA
@@ -310,6 +345,8 @@ urlpatterns = [
                                 ) , 
         name='noticias_crud_editar'
         ),
+        # CURD LOCALSTORAGE
+        path('crud_localstorage/', TemplateView.as_view(template_name="cynr_app/crud_localstorage.html"), name='crud_localstorage'),
 
 ]
 

@@ -7,4 +7,4 @@ COPY . /code/
 #RUN python3 manage.py migrate
 #RUN python3 manage.py createsuperuser --noinput
 #RUN export PGPASSWORD=$POSTGRES_PASSWORD
-#RUN psql -h $POSTGRES_HOST -d $POSTGRES_DB -U $POSTGRES_USER -p $POSTGRES_PORT -f cynr_ini.psql 
+#RUN psql -h $POSTGRES_HOST -d $POSTGRES_DB -U $POSTGRES_USER  -p $POSTGRES_PORT -f cynr_ini.psql 

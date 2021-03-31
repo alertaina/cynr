@@ -92,7 +92,7 @@
               <tr>
                 {% for key,value in registro.items %}
                 {% if key != "id" %}
-                <td>{{value}}</td>
+                <td>{{value|default_if_none:"--"}}</td>
                 {% endif %} 
                 {% endfor %}
                 <td>
