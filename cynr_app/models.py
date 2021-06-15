@@ -147,22 +147,6 @@ class Infraestructura(models.Model):
         managed = True
         db_table = 'infraestructura'
 
-##########################################################################
-# 6 OBRAS DE TOMA
-#-------------------------------------------------------------------------
-class ObrasToma(models.Model):
-    autor_id = models.ForeignKey(User,null=True,on_delete=models.SET_NULL,db_column='autor_id')
-    id = models.AutoField(primary_key=True)
-    id_infra = models.ForeignKey(Infraestructura,related_name='idObrTomaInfra',null=True,on_delete=models.SET_NULL, blank=False,db_column='id_infra')
-    tipo =  models.CharField(max_length=250,blank=False,verbose_name='Tipo') # LISTA DESPLEGABLE
-    funcionamiento = models.CharField(max_length=250,blank=False,verbose_name='Funcionamiento')# LISTA DESPLEGABLE
-    uso = models.CharField(max_length=250,blank=False,verbose_name='Uso')# LISTA DESPLEGABLE
-    estado = models.CharField(max_length=250,blank=False,verbose_name='Estado')# LISTA DESPLEGABLE
-    desc_estado = models.TextField(default=None,blank=True,verbose_name='Descripción Estado')   # Descripción del estado
-
-    class Meta:
-        managed = True
-        db_table = 'obras_toma'
 
 ##########################################################################
 # 7 COTAS Y NIVELES DE REFERENCIA

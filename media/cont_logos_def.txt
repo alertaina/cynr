@@ -1,0 +1,1 @@
+Directorio con los logos por defecto, en caso que no se suba el logo correspondiente.
