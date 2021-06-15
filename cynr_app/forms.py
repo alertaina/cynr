@@ -150,10 +150,10 @@ class FormObraToma(forms.ModelForm):
 #--------------------------------------------------------------------------------
 # FORMSETS PARA CARGAR REGISTROS PADRES E HIJOS: INFRAESTRUCTURA - OBRAS DE TOMA
 #--------------------------------------------------------------------------------
-ObraTomaFormset = inlineformset_factory(
-    Infraestructura, ObrasToma,form=FormObraToma,
-    fields=['tipo','funcionamiento','uso','estado','desc_estado'],
-    extra=1,can_delete=False)
+#ObraTomaFormset = inlineformset_factory(
+#    Infraestructura, ObrasToma,form=FormObraToma,
+#    fields=['tipo','funcionamiento','uso','estado','desc_estado'],
+#    extra=1,can_delete=False)
 #-----------------------------------------------------------------------------
 # CREAR Y EDITAR COTAS Y NIVELES DE REFERENCIA.
 #-----------------------------------------------------------------------------
