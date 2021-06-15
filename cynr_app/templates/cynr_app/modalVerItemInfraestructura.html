@@ -1,0 +1,45 @@
+<div class="modal-dialog modal-lg">
+<div class="modal-content">
+      <div class="modal-header">
+          <h3>{{obj.nombre}}</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      </div>
+						
+      <div class="modal-body">
+        <div class="col-md-12"><dt>Geometría</dt></div>
+        {%  ifnotequal obj.geom None %}
+        <div id="mapid" style="height: 400px;"></div>
+        <script>
+            var geometria = JSON.parse("{{obj.geom.json| escapejs}}"); // trasnformar el json a objeto
+            var map = map_ver_infra_inicializa(geometria)
+        </script>
+        {% else %}
+          <div class="col-md-12"><p class="text-info">No se ha cargado la geometría.</p></div>
+        {%  endifnotequal %}
+        <div class="col-md-12"><dt>Autor</dt></div>
+        <div class="col-md-12">{{obj.autor_id}}</div>
+        <div class="col-md-12"><dt>Categoría</dt></div>
+        <div class="col-md-12">{{obj.categoria}}</div>
+        <div class="col-md-12"><dt>Descripción</dt></div>
+        <div class="col-md-12">{{obj.descripcion}}</div>
+        <div class="col-md-12"><dt>Institución</dt></div>
+        <div class="col-md-12">{{obj.id_inst}}</div>
+        <div class="col-md-12"><dt>Atributos</dt></div>  
+        {% for key, value in obj.atributos.items %}
+          <div class="col-md-11 offset-md-1"><dt class="text-info">{{value.label}}</dt></div>
+          <div class="col-md-11 offset-md-1">{{value.valores}}</div>
+        {% endfor %}
+        <div class="col-md-12"><dt>Ficha Técnica</dt></div>
+        {%  ifnotequal obj.ficha_tec '' %}
+          <div class="col-md-12"><a href="/cynr_app{{obj.ficha_tec.url}}" target="_blank"><i class="fas fa-file fa-2x"></i></a></div>
+        {% else %}
+          <div class="col-md-12">No existe la ficha.</div>
+        {%  endifnotequal %}
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
+</div>
+</div>

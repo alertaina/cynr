@@ -1,0 +1,13 @@
+// OBRAS DE TOMA
+{
+    "tipo":{"label":"Tipo","valores":["ESTACIÓN: BATERIA DE BOMBAS DE COTA FIJA","PONTON: BATERIA DE BOMBAS DE COTA VARIABLE"]},
+    "funcionamiento":{"label":"Funcionamiento","valores":["PERMANENTE","TRANSITORIA"]},
+    "uso":{"label":"Uso","valores":["CONSUMO","INDUSTRIAL","RIEGO"]},
+    "estado":{"label":"Estado","valores":["FUNCIONAMIENTO PLENO","FUNCIONAMIENTO PARCIAL","INACTIVA"]},
+    "desc_estado":{"label":"Descripción del Estado","valores":["Describir el Estado de la Obra"]}
+}
+// LOCALIDADES
+{
+    "nivel_alerta":{"label":"Nivel de Alerta","valores":[]},
+    "nivel_evacuacion":{"label":"Nivel de Evacuación","valores":[]}
+}

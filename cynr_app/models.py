@@ -69,7 +69,8 @@ class DocInstitucionales(models.Model):
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=250,default=None,blank=False,verbose_name='Nombre')
     presentacion = models.TextField(default=None,blank=True,verbose_name='Presentación')
-    id_inst = models.ForeignKey(Instituciones,default=None, related_name='idDocInstitucion',null=True,blank=True,on_delete=models.SET_NULL,db_column='id_inst',verbose_name='Institución') # Generador del documento
+    id_inst = models.ManyToManyField(Instituciones,default=None,blank=True, related_name='idDocInstitucion',db_column='id_inst',verbose_name='Institución') # Generador del documento)
+    #id_inst = models.ForeignKey(Instituciones,default=None, related_name='idDocInstitucion',null=True,blank=True,on_delete=models.SET_NULL,db_column='id_inst',verbose_name='Institución') # Generador del documento
     categoria = models.CharField(max_length=250,default=None,blank=False,verbose_name='Categoria')
     link_doc = models.URLField(max_length = 250,blank=True,verbose_name='Link Documento')
     arch_doc = models.FileField(upload_to='doc_instituciones/', max_length=250, blank=True, verbose_name='Archivo')
@@ -111,7 +112,17 @@ class Contactos(models.Model):
         managed = True
         db_table = 'contactos'
 
+class AtributosPorDefectoInfra(models.Model):
+    autor_id = models.ForeignKey(User,null=True,blank=True,on_delete=models.SET_NULL,db_column='autor_id')
+    id_categoria =  models.ForeignKey(Categorias,related_name='idCategoria',null=False,blank=False,on_delete=models.CASCADE,db_column='id_categoria')
+    atributos =  models.JSONField(null=False,blank=False,verbose_name='Atributos')
 
+    def __str__(self):
+        return self.id_categoria.categoria
+        
+    class Meta:
+        managed = True
+        db_table = 'atributos_def_infra'
 ##########################################################################
 # 5 INFRAESTRUCTURA
 #-------------------------------------------------------------------------
@@ -128,12 +139,14 @@ class Infraestructura(models.Model):
     # file will be uploaded to MEDIA_ROOT / uploads 
     ficha_tec = models.FileField(upload_to ='fichas_tecnicas/',blank=True,verbose_name='Ficha Técnica')
     atributos =  models.JSONField(null=True,blank=True) # permite cargar atributos en formato json
+    id_atr_def = models.ForeignKey(AtributosPorDefectoInfra,related_name='idAtrPorDefecto',null=True,on_delete=models.SET_NULL,blank=True,db_column='id_atr_def')
     def __str__(self):
         return self.nombre
  
     class Meta:
         managed = True
         db_table = 'infraestructura'
+
 ##########################################################################
 # 6 OBRAS DE TOMA
 #-------------------------------------------------------------------------
@@ -266,13 +279,16 @@ class Archivos(models.Model):
 class Noticias(models.Model):
     autor_id = models.ForeignKey(User,null=True,on_delete=models.SET_NULL,db_column='autor_id')    
     id = models.AutoField(primary_key=True)
-    id_inst = models.ForeignKey(Instituciones,related_name='idNotInstitucion',null=True,on_delete=models.SET_NULL,blank=True,db_column='id_inst',verbose_name='Institución')
-    id_infra = models.ForeignKey(Infraestructura,related_name='idNotInfra',null=True,on_delete=models.SET_NULL,blank=True,db_column='id_infra',verbose_name='Infraestructura')    
+    id_fuente = models.ForeignKey(Instituciones,related_name='idNotFuente',null=True,on_delete=models.SET_NULL,blank=True,db_column='id_fuente',verbose_name='Fuente')
+    #id_inst = models.ForeignKey(Instituciones,related_name='idNotInstitucion',null=True,on_delete=models.SET_NULL,blank=True,db_column='id_inst',verbose_name='Institución')
+    id_inst = models.ManyToManyField(Instituciones,default=None,blank=True,related_name='idNotInstitucion')
+    #id_infra = models.ForeignKey(Infraestructura,related_name='idNotInfra',null=True,on_delete=models.SET_NULL,blank=True,db_column='id_infra',verbose_name='Infraestructura')    
+    id_infra = models.ManyToManyField(Infraestructura,default=None,blank=True,related_name='idNotInfra')
     encabezado = models.CharField(max_length=250,default=None,blank=False,verbose_name='Encabezado')
     presentacion = models.TextField(default=None,blank=True,verbose_name='Presentación')
     fecha_hora = models.DateTimeField(null=False,blank=False)
     link_not = models.URLField(max_length = 250,blank=True,verbose_name='Link Noticia')
-    arch_not = models.FileField(upload_to='cynr_app/noticias', max_length=200, blank=True, verbose_name='Archivo Noticia')  
+    arch_not = models.FileField(upload_to='noticias/', max_length=200, blank=True, verbose_name='Archivo Noticia')  
 
     def __str__(self):
         return self.encabezado
@@ -288,9 +304,15 @@ class CapasGeoJson(models.Model):
     id = models.AutoField(primary_key=True)
     titulo = models.CharField(max_length=250,default=None,blank=False,verbose_name='Título')
     descripcion = models.TextField(default=None,blank=True)
-    fecha_hora = models.DateTimeField(null=True,blank=True)
-    capa = models.JSONField(null=False,blank=False)    
+    fecha_hora = models.DateTimeField(null=True,blank=True)   
+    capa = models.JSONField(null=True,blank=True)
+    arch_capa = models.FileField(upload_to='capasgeojson/', max_length=200, blank=False, verbose_name='Archivo de Capa')      
 
+    def __str__(self):
+        return self.titulo
+    class Meta:
+        managed = True
+        db_table = 'capasgeojson' 
 
 ##########################################################################
 # 13 CARRUSEL DE LA PÁGINA PRINCIPAL

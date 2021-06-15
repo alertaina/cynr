@@ -106,7 +106,7 @@ urlpatterns = [
         path('doc_instituciones_crud_ver/<int:pk>',DetailView.as_view(
         model = DocInstitucionales,
         context_object_name = 'obj',
-        template_name = 'cynr_app/modalVerItemInstituciones.html',
+        template_name = 'cynr_app/modalVerItemDocInstitucionales.html',
                                 ) , 
         name='doc_instituciones_crud_ver'
         ),
@@ -134,8 +134,11 @@ urlpatterns = [
         name='doc_instituciones_crud_eliminar'
         ),
 
-    #----------------------------------------------------------------------
+    ####################################################################
+    #- INFRAESTRUCTURA
+    ####################################################################
     # CRUD INFRAESTRUCTURA
+
     path('infraestructura_crud/',ListView.as_view(
         #queryset = contenidos.querysetInfraestructura,
         queryset =  Infraestructura.objects.all().order_by('nombre').values('autor_id__username','id','categoria','nombre','descripcion','id_inst__nombre'),
@@ -154,7 +157,7 @@ urlpatterns = [
         extra_context={'contenido': contenidos.contextoInfraestructura,
                       },
         form_class = forms.FormInfraestructura,
-        template_name = 'cynr_app/modalCreateItemGeoWithFile.html',
+        template_name = 'cynr_app/modalCreateItemInfraestructura.html',
                                 ) , 
         name='infraestructura_crud_crear'
         ),
@@ -162,7 +165,7 @@ urlpatterns = [
         path('infraestructura_crud_ver/<int:pk>',DetailView.as_view(
         model = Infraestructura,
         context_object_name = 'obj',
-        template_name = 'cynr_app/modalVerItemInstituciones.html',
+        template_name = 'cynr_app/modalVerItemInfraestructura.html',
                                 ) , 
         name='infraestructura_crud_ver'
         ),
@@ -189,43 +192,10 @@ urlpatterns = [
                             ) , 
         name='infraestructura_crud_eliminar'
         ),
-    #----------------------------------------------------------------------
-    # CRUD OBRA DE TOMA
-    path('obras_de_toma_crud/',ListView.as_view(
-        #queryset = contenidos.querysetObraToma,
-        queryset = ObrasToma.objects.all().order_by('id_infra__nombre').values('autor_id__username','id','id_infra__nombre','estado'),
-        paginate_by = 4,
-        extra_context={'menu_navegacion':menu.MENU_NAVEGACION,
-                        'contenido': contenidos.contextoObraToma,
-                        #'total_registros': contenidos.querysetObraToma.count(),
-                      },
-        template_name = 'cynr_app/base_paginas_crud.html',
-                                ) , 
-        name='obras_de_toma_crud'
-        ),    
-    # CREAR OBRA DE TOMA
-        path('obras_de_toma_crud_crear',views.BaseObraTomaCreateView.as_view(
-        success_url = reverse_lazy('cynr_app:obras_de_toma_crud'),
-        extra_context={'contenido': contenidos.contextoObraToma,
-                      },
-        #form_class = forms.FormInfraestructura,
-        #template_name = 'cynr_app/modalFormItemObraToma.html',
-                                ) , 
-        name='obras_de_toma_crud_crear'
-        ),
-    # EDITAR OBRA DE TOMA
-        path('obras_de_toma_crud_editar/<int:pk>', UpdateView.as_view(
-        model = Infraestructura,
-        context_object_name = 'obj',
-        success_url = reverse_lazy('cynr_app:obras_de_toma_crud'),
-        extra_context={'contenido': contenidos.contextoObraToma,
-                      },
-        form_class = forms.FormObraToma,
-        template_name = 'cynr_app/modalFormItemPadreHijo.html',
-                                ) , 
-        name='obras_de_toma_crud_editar'
-        ),
-   #----------------------------------------------------------------------------
+
+   ####################################################################
+   #- CYNR
+   ####################################################################
    # CRUD CYNR
     path('cynr_crud/',ListView.as_view(
         #model = Instituciones,
@@ -240,7 +210,7 @@ urlpatterns = [
                                 ) , 
         name='cynr_crud'
         ),
-    # CREAR 1
+    # CREAR CYNR
         path('cynr_crud_crear',views.BaseCreateView.as_view(
         success_url = reverse_lazy('cynr_app:cynr_crud'),
         extra_context={'contenido': contenidos.contextoCyNR,
@@ -250,7 +220,7 @@ urlpatterns = [
                                 ) , 
         name='cynr_crud_crear'
         ),
-    # EDITAR 1
+    # EDITAR CYNR
         path('cynr_crud_editar/<int:pk>', UpdateView.as_view(
         model = CyNR,
         context_object_name = 'obj',
@@ -262,7 +232,9 @@ urlpatterns = [
                                 ) , 
         name='cynr_crud_editar'
         ),
-   #----------------------------------------------------------------------------
+    ####################################################################
+    #- DOCUMENTOS
+    ####################################################################
    # CRUD DOCUMENTOS
     path('documentos_crud/',ListView.as_view(
         #queryset = contenidos.querysetDoc,
@@ -298,28 +270,27 @@ urlpatterns = [
                                 ) , 
         name='documentos_crud_editar'
         ),
-   #----------------------------------------------------------------------------
+    ####################################################################
+    #- CONTENIDO DOCUMENTOS
+    ####################################################################
    # CRUD CONTENIDO DOCUMENTO
     path('cont_documento_crud/<int:pk_doc>',views.ContDocView.as_view(), 
         name='cont_documento_crud'
         ),
- 
-    # PAGINA GEOMANIO
-    path('geomanio', views.BasePaginas.as_view(
-        template_name='cynr_app/crud_geomanio.html',
-        extra_context={'contenido': contenidos.contextoGeomanio,}
-        ), name='geomanio'),
-   #----------------------------------------------------------------------------
+
+    ####################################################################
+    #- NOTICIAS
+    ####################################################################
    # CRUD NOTICIAS
     path('noticias_crud/',ListView.as_view(
         #queryset = contenidos.querysetNot,
-        queryset = Noticias.objects.all().order_by('fecha_hora').values('autor_id__username','id','fecha_hora','id_infra__nombre','encabezado'),
+        #queryset = Noticias.objects.all().order_by('fecha_hora').values('autor_id__username','id','fecha_hora','id_infra__nombre','encabezado'),
+        queryset = Noticias.objects.all().order_by('fecha_hora').prefetch_related(), # para que agregue los datos relacionados(id_infra e id_inst)
         paginate_by = 4,
         extra_context={'menu_navegacion':menu.MENU_NAVEGACION,
                         'contenido': contenidos.contextoNot,
-                        #'total_registros': contenidos.querysetNot.count(),
                       },
-        template_name = 'cynr_app/base_paginas_crud.html',
+        template_name = 'cynr_app/noticias_crud.html',
                                 ) , 
         name='noticias_crud'
         ),
@@ -329,7 +300,7 @@ urlpatterns = [
         extra_context={'contenido': contenidos.contextoNot,
                       },
         form_class = forms.FormNot,
-        template_name = 'cynr_app/modalFormItem.html',
+        template_name = 'cynr_app/modalCreateItem.html',
                                 ) , 
         name='noticias_crud_crear'
         ),
@@ -337,16 +308,105 @@ urlpatterns = [
         path('noticias_crud_editar/<int:pk>', UpdateView.as_view(
         model = Noticias,
         context_object_name = 'obj',
-        success_url = reverse_lazy('cynr_app:noticas_crud'),
+        success_url = reverse_lazy('cynr_app:noticias_crud'),
         extra_context={'contenido': contenidos.contextoNot,
                       },
         form_class = forms.FormNot,
-        template_name = 'cynr_app/modalFormItem.html',
+        template_name = 'cynr_app/modalUpdateItemWithFile.html',
                                 ) , 
         name='noticias_crud_editar'
         ),
+    # ELIMINAR INFRAESTRUCTURA
+    path('noticias_crud_eliminar/<int:pk>', DeleteView.as_view(
+    model = Noticias,
+    context_object_name = 'obj',
+    success_url = reverse_lazy('cynr_app:noticias_crud'),
+    extra_context={'contenido': contenidos.contextoNot,
+                },
+    template_name = 'cynr_app/modalDeleteItem.html',
+                        ) , 
+    name='noticias_crud_eliminar'
+    ),
+    # VER NOTICIA
+    path('noticias_crud_ver/<int:pk>',DetailView.as_view(
+    model = Noticias,
+    context_object_name = 'obj',
+    template_name = 'cynr_app/modalVerItemNoticia.html',
+                            ) , 
+    name='noticias_crud_ver'
+    ),
+    ####################################################################
+    #- MAPA
+    ####################################################################
+    path('mapa/',ListView.as_view(
+        queryset = CapasGeoJson.objects.all().values('autor_id__username','titulo','descripcion','fecha_hora','id'),
+        extra_context={'menu_navegacion':menu.MENU_NAVEGACION,
+                        'contenido': contenidos.contextoMapa,
+                      },
+        template_name = 'cynr_app/mapa.html',
+                                ) , 
+        name='mapa'
+        ),
+
         # CURD LOCALSTORAGE
         path('crud_localstorage/', TemplateView.as_view(template_name="cynr_app/crud_localstorage.html"), name='crud_localstorage'),
+                # CURD LOCALSTORAGE
+        path('x_spreadsheet/', TemplateView.as_view(template_name="cynr_app/x_spreadsheet.html"), name='x_spreadsheet'),
+    ####################################################################
+    #- CAPAS GEOJSON
+    ####################################################################
+    # CRUD CAPAS GEOJSON
+    path('capasgeo_crud/',ListView.as_view(
+        queryset =  CapasGeoJson.objects.all().order_by('titulo').values('autor_id__username','id','titulo','descripcion','fecha_hora'),
+        paginate_by = 4,
+        extra_context={'menu_navegacion':menu.MENU_NAVEGACION,
+                        'contenido': contenidos.contextoGeoJson,
+                      },
+        template_name = 'cynr_app/base_paginas_crud.html',
+                                ) , 
+        name='capasgeo_crud'
+        ),    
+    # CREAR CAPAS GEOJSON
+        path('capasgeo_crud_crear',views.BaseCreateView.as_view(
+        success_url = reverse_lazy('cynr_app:capasgeo_crud'),
+        extra_context={'contenido': contenidos.contextoGeoJson,
+                      },
+        form_class = forms.FormGeoJson,
+        template_name = 'cynr_app/modalCreateItemWithFile.html',
+                                ) , 
+        name='capasgeo_crud_crear'
+        ),
+    # VER CAPAS GEOJSON
+        path('capasgeo_crud_ver/<int:pk>',DetailView.as_view(
+        model = CapasGeoJson,
+        context_object_name = 'obj',
+        template_name = 'cynr_app/modalVerItemCapaGeojson.html',
+                                ) , 
+        name='capasgeo_crud_ver'
+        ),
+    # EDITAR CAPAS GEOJSON
+        path('capasgeo_crud_editar/<int:pk>', views.BaseUpdateView.as_view(
+        model = CapasGeoJson,
+        context_object_name = 'obj',
+        success_url = reverse_lazy('cynr_app:capasgeo_crud'),
+        extra_context={'contenido': contenidos.contextoGeoJson,
+                      },
+        form_class = forms.FormGeoJson,
+        template_name = 'cynr_app/modalUpdateItemWithFile.html',
+                                ) , 
+        name='capasgeo_crud_editar'
+        ),
+    # ELIMINAR CAPAS GEOJSON
+        path('capasgeo_crud_eliminar/<int:pk>', DeleteView.as_view(
+        model = CapasGeoJson,
+        context_object_name = 'obj',
+        success_url = reverse_lazy('cynr_app:capasgeo_crud'),
+        extra_context={'contenido': contenidos.contextoGeoJson,
+                    },
+        template_name = 'cynr_app/modalDeleteItem.html',
+                            ) , 
+        name='capasgeo_crud_eliminar'
+        ),
 
 ]
 

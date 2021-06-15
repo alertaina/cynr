@@ -1,0 +1,20 @@
+<div class="modal-dialog modal-lg">
+<div class="modal-content">
+      <div class="modal-header">
+          <h3>{{obj.titulo}}</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      </div>						
+      <div class="modal-body">
+        <div class="col-md-12"><dt>Descripción</dt></div>
+        <div class="col-md-12">{{obj.descripcion}}</div>
+        <div class="col-md-12"><dt>Fecha y Hora de Publicación</dt></div>
+        <div class="col-md-12">{{obj.fecha_hora}}</div>
+        <div class="col-md-12"><dt>Archivo de la Capa</dt></div>
+        <div class="col-md-12">{{obj.arch_capa.url}}</div>
+        <div class="col-md-12"><a href="/cynr_app{{obj.arch_capa.url}}" download ><i class="fas fa-file fa-2x"></i></a></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
+</div>
+</div>

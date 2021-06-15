@@ -137,3 +137,11 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+# carpetas del directorio multimedia, menos logos_por_defecto
+media/archivos
+media/capasgeojson
+media/doc_institucionales
+media/imagenes
+media/logos
+media/noticias

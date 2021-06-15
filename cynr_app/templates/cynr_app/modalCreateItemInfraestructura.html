@@ -1,0 +1,106 @@
+<div class="modal-dialog modal-lg">
+  <div class="modal-content">
+        <div class="modal-header">			
+            <h4 class="modal-title">Crear Registro</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        </div>
+        <div class="modal-body">
+          {% if user.is_authenticated %}
+          <div class="col-md-12"><label class="control-label"><dt>Geometría</dt></label></div>
+          <div id="mapid" style="height: 400px;"></div>
+          <script>
+            /***********************************************************
+            FUNCION QUE INICIALIZA EL MAPA DEL FORMULARIO DE ATRIBUTOS
+            ************************************************************/
+            var map = map_infra_inicializa()
+            /***********************************************************
+            FUNCION QUE DESPLIEGA EL FORMULARIO DE ATRIBUTOS
+            ************************************************************/
+            var obj_atrib = {};
+            {% for item in atributos_base %}
+              // hay que reemplazar el caracter '\'' por '\"' en los atributos para poder convertirlo en un objeto
+              obj_atrib["{{item.id_categoria}}"] = JSON.parse("{{item.atributos| escapejs}}".replaceAll('\'', '\"'));    
+            {% endfor %}
+            atributos_infra(obj_atrib);                  
+            /***********************************************************
+            FUNCION QUE SE EJECUTA LA ENVIAR EL FORMULARIO
+            PARA GUARDAR LA GEOMETRIA Y LOS ATRBUTOS EN LA BASE DE DATOS
+            ************************************************************/
+            function getGeo(map) {
+              document.getElementById("id_geom").value = cargarGeo();
+            }
+            function getGeoYAtr(){
+              document.getElementById("id_geom").value = cargarGeo(map);
+              //cargarAtr(obj_atrib);
+              cargarAtr();
+            }
+            /***********************************************************
+            ATRIBUTOS NUEVOS
+            ************************************************************/
+            document.getElementById("btn_nuevo_atr").onclick = function(){
+              var nombre = document.getElementById("id_in_atr_nuevo").value;
+              var [contenidoHtml,id_nombre] = atrNuevoForm(nombre);
+              if ( $(`#${id_nombre}`).length == 0 ) { // significa que no existe
+                document.getElementById("atributos_campos").innerHTML += contenidoHtml;
+                }           
+            };
+
+          </script>			
+            <form  method="post" action='{% url contenido.url_crear %}' class="php-email-form" enctype="multipart/form-data" onsubmit="getGeoYAtr()">
+            {% csrf_token %}
+              {% for field in form %}
+              {% if field.label == "Atributos" %}
+                <div class="col-md-12"><label class="control-label" for="{{ field.id_for_label }}"><dt>{{ field.label }}</dt></label></div>
+                <div class="col-md-12">
+                  <button  type="button" class="btn btn-info btn-block" data-toggle="collapse" data-target="#atributos">Cargar Atributos </button>
+                  <div id="atributos" class="collapse">
+                    <div id="atributos_campos"></div>
+                    <!--Boton para atributo nuevo-->
+                    <label id="label_btn_nuevo_atr" class="control-label text-info" ><b>Atributo Nuevo</b></label>
+                    <div class="form-row">
+                    <div class="col-2">
+                    <button  id="btn_nuevo_atr" type="button" class="btn btn-outline-info btn-block"><i class="fas fa-plus"> </i>
+                    </div>
+                    <div class="col">
+                    <input type="text" placeholder="Nombre del Atributo" name="atributo nuevo" maxlength="250" class="form-control" id="id_in_atr_nuevo">
+                    </div>
+                    </div>            
+                  </div>
+                </div>
+                <!--<div class="col-md-12">{{field}}</div>-->
+                <div class="col-md-12">
+                <textarea style="display:none;" name="atributos" cols="40" rows="10" class="form-control" id="id_atributos">null</textarea>
+                </div>
+              {% else %}     
+                <div class="form-group">
+                  <div class="col-md-12"><label class="control-label" for="{{ field.id_for_label }}"><dt>{{ field.label }}</dt></label></div>
+                  <div class="col-md-12">{{field}}</div>
+                </div>
+              {% endif %}
+                <div class="{% if field.errors %} invalid{% endif %}">
+                  {% for error in field.errors %}
+                    <p class="help-block">{{ error }}</p>
+                  {% endfor %}
+                </div>
+              {% endfor %}
+              <div class="form-group">
+                <div class="col-md-12">
+                  <input type="hidden" name="geom" maxlength="200" class="form-control" required="" id="id_geom">
+                </div>
+              </div>             
+                <button type="submit" class="submit-btn btn btn-info">Crear</button>
+            </form>
+          {% else %}
+          <div class="alert alert-info" role="alert">
+            <i class="fas fa-info-circle" style="font-size:24px"></i> Debe autenticarse para poder crear un registro.
+          </div>
+          {% endif %}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        </div>
+  </div>
+  </div>
+
+
+

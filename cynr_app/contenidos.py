@@ -35,7 +35,7 @@ contextoDocPagInst ={
 #querysetInfraestructura= Infraestructura.objects.all().order_by('nombre').values('autor_id__username','id','categoria','nombre','descripcion','id_inst__nombre')
 contextoInfraestructura ={
                     'titulo': 'Infraestructura',
-                    'encabezados':['autor_id','Categoría','Nombre','Descripción','Institución'],
+                    'encabezados':['Autor','Categoría','Nombre','Descripción','Institución'],
                     'url_crear':'cynr_app:infraestructura_crud_crear',
                     'url_ver':'cynr_app:infraestructura_crud_ver',
                     'url_editar':'cynr_app:infraestructura_crud_editar',
@@ -48,7 +48,7 @@ contextoInfraestructura ={
 #querysetObraToma= ObrasToma.objects.all().order_by('id_infra__nombre').values('autor_id__username','id','id_infra__nombre','estado')
 contextoObraToma ={
                     'titulo': 'Obras de Toma',
-                    'encabezados':['autor_id','Nombre','Estado'],
+                    'encabezados':['Autor','Nombre','Estado'],
                     'url_crear':'cynr_app:obras_de_toma_crud_crear',
                     'url_editar':'cynr_app:obras_de_toma_crud_editar',
                     'url_eliminar':'cynr_app:obras_de_toma_crud_eliminar'
@@ -60,7 +60,7 @@ contextoObraToma ={
 #querysetCyNR= CyNR.objects.all().order_by('id_infra__nombre').values('autor_id__username','id','id_infra__nombre','referencia','valor','unid_meteo_est')
 contextoCyNR ={
                     'titulo': 'Cotas y Niveles de Referencia',
-                    'encabezados':['autor_id','Infraestructura','referencia','valor','Id Estación'],
+                    'encabezados':['Autor','Infraestructura','referencia','valor','Id Estación'],
                     'url_crear':'cynr_app:cynr_crud_crear',
                     'url_editar':'cynr_app:cynr_crud_editar',
                     'url_eliminar':'cynr_app:cynr_crud_eliminar'
@@ -72,7 +72,7 @@ contextoCyNR ={
 #querysetDoc= Documentos.objects.all().order_by('fecha_hora').values('autor_id__username','id','fecha_hora','categoria','titulo','descripcion')
 contextoDoc ={
                     'titulo': 'Documentos',
-                    'encabezados':['autor_id','Fecha','Categoria','Titulo','Descripción'],
+                    'encabezados':['Autor','Fecha','Categoria','Titulo','Descripción'],
                     'url_crear':'cynr_app:documentos_crud_crear',
                     'url_editar':'cynr_app:documentos_crud_editar',
                     'url_eliminar':'cynr_app:documentos_crud_eliminar',
@@ -90,9 +90,25 @@ contextoGeomanio ={
 #querysetNot= Noticias.objects.all().order_by('fecha_hora').values('autor_id__username','id','fecha_hora','id_infra__nombre','encabezado')
 contextoNot ={
                     'titulo': 'Noticia',
-                    'encabezados':['autor_id','Fecha','Infraestructura','Encabezado'],
+                    'encabezados':['Autor','Fecha','Infraestructuras','Instituciones','Encabezado'],
                     'url_crear':'cynr_app:noticias_crud_crear',
+                    'url_ver':'cynr_app:noticias_crud_ver',
                     'url_editar':'cynr_app:noticias_crud_editar',
                     'url_eliminar':'cynr_app:noticias_crud_eliminar'
                  }   
 # -------------------------------------------------------------------------------------------------
+# PÁGINA MAPA -----------------------------------------------------------------------------
+contextoMapa ={
+                    'titulo': 'Mapa',
+                    'encabezados':['Autor','Título','Descripción','Fecha y Hora'],
+                 }   
+# -------------------------------------------------------------------------------------------------
+# PÁGINA CAPAS GEOJSON -----------------------------------------------------------------------------
+contextoGeoJson ={
+                    'titulo': 'Capas Geojson',
+                    'encabezados':['Autor','Título','Descripción','Fecha Hora'],
+                    'url_crear':'cynr_app:capasgeo_crud_crear',
+                    'url_ver':'cynr_app:capasgeo_crud_ver',
+                    'url_editar':'cynr_app:capasgeo_crud_editar',
+                    'url_eliminar':'cynr_app:capasgeo_crud_eliminar'
+                 }   

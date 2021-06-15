@@ -15,7 +15,9 @@ from django.contrib.auth.models import User
 from django.views.generic.edit import CreateView, UpdateView
 from django.db import transaction
 from django.urls import reverse_lazy
-#mport json
+
+import json
+from django.core.serializers.json import DjangoJSONEncoder
 
 from .models import *
 from .forms import *
@@ -128,6 +130,11 @@ class BaseInfraestructuraCreateView(CreateView):
         f.geom = self.request.POST["geom"]
         f.save()
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['atributos_base']= AtributosPorDefectoInfra.objects.all()
+        return context
 
 #########################################################################
 # CLASE PARA LA ACTUALIZACIÓN DE INFRAESTRUCTURA

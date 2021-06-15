@@ -73,7 +73,7 @@ class FormDocInstitucionales(forms.ModelForm):
             CHOICE_CATEGORIAS.append((choice[0],choice[0]))
         super(FormDocInstitucionales, self).__init__(*args, **kwargs)
         self.fields['nombre'].widget.attrs.update({'class': 'form-control'})
-        self.fields['id_inst'].widget.attrs.update({'class': ' form-control seleccion-simple-select2'})
+        self.fields['id_inst'].widget.attrs.update({'class': 'form-control seleccion-simple-select2'})
         self.fields['presentacion'].widget.attrs.update({'class': 'form-control','row':3})
         self.fields['categoria']=forms.CharField(label='Categoria', required=False, help_text='Seleccione la categoria',
         widget=forms.Select(attrs={'class':"form-control",'placeholder': 'Categoria','rows':1},choices=CHOICE_CATEGORIAS))
@@ -259,8 +259,9 @@ DocContDocFormSet = inlineformset_factory(
 class FormNot(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(FormNot, self).__init__(*args, **kwargs)
-        self.fields['id_infra'].widget.attrs.update({'class': 'form-control'})
-        self.fields['id_inst'].widget.attrs.update({'class': 'form-control'})
+        self.fields['id_fuente'].widget.attrs.update({'class': 'form-control'})
+        self.fields['id_infra'].widget.attrs.update({'class': 'form-control seleccion-simple-select2'})
+        self.fields['id_inst'].widget.attrs.update({'class': 'form-control seleccion-simple-select2'})
         self.fields['encabezado'].widget.attrs.update({'class': 'form-control'})
         self.fields['presentacion'].widget.attrs.update({'class': 'form-control'})
         self.fields['fecha_hora']=forms.DateTimeField(help_text='Fecha y Hora de creación',widget=forms.DateTimeInput(attrs={'type': 'datetime-local','class': 'form-control'}))
@@ -269,4 +270,19 @@ class FormNot(forms.ModelForm):
  
     class Meta:
         model = Noticias
-        fields=['id_infra','id_inst','encabezado','presentacion','fecha_hora','link_not','arch_not']
+        fields=['id_fuente','id_infra','id_inst','encabezado','presentacion','fecha_hora','link_not','arch_not']
+#-----------------------------------------------------------------------------
+# CREAR Y EDITAR CAPAS GEOJSON.
+#-----------------------------------------------------------------------------
+class FormGeoJson(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(FormGeoJson, self).__init__(*args, **kwargs)
+        self.fields['titulo'].widget.attrs.update({'class': 'form-control'})
+        self.fields['descripcion'].widget.attrs.update({'class': 'form-control'})
+        self.fields['fecha_hora']=forms.DateTimeField(help_text='Fecha y Hora de creación',widget=forms.DateTimeInput(attrs={'type': 'datetime-local','class': 'form-control'}))
+        self.fields['capa'].widget.attrs.update({'class': 'form-control'})
+        self.fields['arch_capa'].widget.attrs.update({'class': 'form-control-file'})
+ 
+    class Meta:
+        model = CapasGeoJson
+        fields=['titulo','descripcion','fecha_hora','capa','arch_capa']
