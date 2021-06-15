@@ -1,0 +1,9 @@
+{
+      "type": "Feature",
+      "properties": {
+        "nomb_mus": "Museo Picasso Málaga"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-4.41829653723357, 36.721615632788016 ]
+      }
